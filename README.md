@@ -1,6 +1,6 @@
 🚫 Note: All lines that start with 🚫 are instructions and should be deleted before this is posted to your portfolio. This is intended to be a guideline, feel free to add your own flare to it.
 
-🚫 The numbers 1️⃣ through 5️⃣ next to each item represent the week that part of the docs needs to be comepleted by.  Make sure to delete the numbers by the end of Labs.
+🚫 The numbers 1️⃣ through 5️⃣ next to each item represent the week that part of the docs needs to be completed by.  Make sure to delete the numbers by the end of Labs.
 
 🚫 Each student has a required minimum number of meaningful PRs each week per the rubric. Contributing to docs does NOT count as a PR to meet your weekly requirements.
 
@@ -8,20 +8,16 @@
 
 1️⃣ You can find the deployed project at [🚫URL NAME GOES HERE](🚫copy and paste URL here).
 
-## 4️⃣ Contributors
+## Job Book Contributors
 
 🚫Add contributor info below, make sure add images and edit the social links for each member. Add to or delete these place-holders as needed
 
-|                                       [Ken Boelter](https://github.com/krboelter)                                        |                                       [Kevin Carr](https://github.com/kevcarr11)                                        |                                       [Rose Landroche](https://github.com/roselandroche)                                        |                                       [Roger Lee](https://github.com/rm-lee)                                        |                                       [Michelle Scott](https://github.com/scottmm374)                                        
-|                                       [Sara Pettigrew](https://github.com/spettigrew)                                        |                                       [Aaron Spurgeon](https://github.com/aaronspurgeon)                                        |
+|                                       [Ken Boelter <img src="https://github.com/favicon.ico" width="20">](https://github.com/krboelter) [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/ken-boelter)                                        |                                       [Kevin Carr<img src="https://github.com/favicon.ico" width="20">](https://github.com/kevcarr11) [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/kevin-carr)                                        |                                       [Rose Landroche<img src="https://github.com/favicon.ico" width="20">](https://github.com/roselandroche) [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/rose-landroche)                                        |                                       [Roger Lee<img src="https://github.com/favicon.ico" width="20">](https://github.com/rm-lee) [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/roger-m-lee)                                        |                                       [Michelle Scott<img src="https://github.com/favicon.ico" width="20">](https://github.com/scottmm374) [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/michelle-scott)                                        
+|                                       [Sara Pettigrew<img src="https://github.com/favicon.ico" width="20">](https://github.com/spettigrew) [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/sara-pettigrew)                                        |                                       [Aaron Spurgeon<img src="https://github.com/favicon.ico" width="20">](https://github.com/aaronspurgeon) [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/aaron-spurgeon)                                       |
 
-|                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "85" />](https://github.com/krboelter)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "85" />](https://github.com/kevcarr11)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-female.png" width = "85" />](https://github.com/roselandroche)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "85" />](https://github.com/rm-lee)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-female.png" width = "85" />](https://github.com/scottmm374)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-female.png" width = "85" />](https://github.com/spettigrew)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "85" />](https://github.com/aaronspurgeon)                       
-|                 [<img src="https://github.com/favicon.ico" width="20"> ](https://github.com/)                 |            [<img src="https://github.com/favicon.ico" width="20"> ](https://github.com/spettigrew)             |           [<img src="https://github.com/favicon.ico" width="20"> ](https://github.com/Mister-Corn)            |          [<img src="https://github.com/favicon.ico" width="20"> ](https://github.com/NandoTheessen)           |            [<img src="https://github.com/favicon.ico" width="20"> ](https://github.com/wvandolah)             |                 [<img src="https://github.com/favicon.ico" width="20"> ](https://github.com/)                 |                 [<img src="https://github.com/favicon.ico" width="20"> ](https://github.com/)                 |
-| [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="10"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="10"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="10"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="10"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="10"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="10"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="10"> ](https://www.linkedin.com/) |
-
+|                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "85" /> ](https://github.com/krboelter)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "85" />](https://github.com/kevcarr11)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-female.png" width = "85" />](https://github.com/roselandroche)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "85" />](https://github.com/rm-lee)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-female.png" width = "85" />](https://github.com/scottmm374)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-female.png" width = "85" />](https://github.com/spettigrew)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "85" />](https://github.com/aaronspurgeon)                       
 <br>
 <br>
-
 🚫 4️⃣ Optional examples of using images with links for your tech stack, make sure to change these to fit your project
 
 ![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg)
@@ -94,7 +90,7 @@ Water's like me. It's laaazy ... Boy, it always looks for the easiest way to do
 
 🚫Replace text below with a description of the API
 
-This is the way you take out your flustrations. Get away from those little Christmas tree things we used to make in school. Isn't it fantastic that you can change your mind and create all these happy things? Everything's not great in life, but we can still find beauty in it.
+This is the way you take out your frustrations. Get away from those little Christmas tree things we used to make in school. Isn't it fantastic that you can change your mind and create all these happy things? Everything's not great in life, but we can still find beauty in it.
 
 ## 3️⃣ Misc API here
 
@@ -128,7 +124,7 @@ In order for the app to function correctly, the user must set up their own envir
     *  REACT_APP_messagingSenderId - in the Firebase dashboard
     *  REACT_APP_stripe_API - this is your public Stripe API key, generated in the Stripe dashboard
     *  REACT_APP_backendURL - optional for your local development server
-    *  REACT_APP_clientid - this is the Stripe_connect clientID, generated in Stripe_connect settings
+    *  REACT_APP_clientId - this is the Stripe_connect clientID, generated in Stripe_connect settings
     *  REACT_APP_stripe_plan - this is the ID for a second Stripe subscription plan, generated under Stripe products
 
 # 5️⃣ Content Licenses
@@ -152,7 +148,7 @@ In order for the app to function correctly, the user must set up their own envir
 
 🚫replace these examples with your own
 
-    * typecheck - runs the TypeScript compiler
+    * type-check - runs the TypeScript compiler
     * build - creates a build of the application
     * start - starts the production server after a build is created
     * test - runs tests in **tests** directory \* eject - copy the configuration files and dependencies into the project so you have full control over them
