@@ -30,17 +30,15 @@
 
 ## Project Overview
 
-1️⃣ [Trello Board](🚫add link to trello board here)
+1️⃣ [Trello Board]https://trello.com/b/cvKexAA0/labspt8-job-book
 
-1️⃣ [Product Canvas](🚫add link to product canvas here)
+1️⃣ [Product Canvas]https://www.notion.so/Job-Book-d479015f772845d8b86099d2a9acb252
 
-1️⃣ [UX Design files](🚫add link to design files here) - 🚫 delete if not applicable
+1️⃣ [UX Design files]https://www.figma.com/file/kgXSUPtM7EBnAMRLt9lcMn/Job-Book?node-id=0%3A1
 
-🚫 Replace lorem ipsum with a description of your project
+Description of Job Book project:
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Job Boos is a Chrome extension that lets you grab and save job postings with a rating of how interested you are in the job.
 
 
 ### 4️⃣ Key Features
