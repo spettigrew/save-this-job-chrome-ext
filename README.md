@@ -6,7 +6,7 @@
 
 # 1️⃣ Save this Job
 
-1️⃣ You can find the deployed project at [🚫URL NAME GOES HERE](🚫copy and paste URL here).
+1️⃣ You can find the deployed project at https://www.savethisjob.com/
 
 ## Save this Job Contributors
 
@@ -189,5 +189,5 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
-See [Backend Documentation](🚫_link to your backend readme here_) for details on the backend of our project.
+See [Backend Documentation] https://github.com/Lambda-School-Labs/job-book-be/blob/master/README.mdfor details on the backend of our project.
 
