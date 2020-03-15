@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import './App.css';
+
+import { useEffect } from 'react';
 import Swal from 'sweetalert2'
 
 function App() {
 
-
+  useEffect(() => {
     const Toast = Swal.mixin({
       toast: true,
       position: 'top-end',
@@ -21,12 +21,9 @@ function App() {
       icon: 'success',
       title: 'Job Saved Successfully !'
     })
- 
-  return (
-    <div className="App">
-      
-    </div>
-  );
+  })
+
+  return null
 }
 
 export default App;
