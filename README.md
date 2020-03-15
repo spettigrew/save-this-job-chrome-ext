@@ -34,7 +34,7 @@
 
 1️⃣ [Product Canvas]https://www.notion.so/Save-this-Job-d479015f772845d8b86099d2a9acb252
 
-1️⃣ [UX Design files]https://www.figma.com/file/kgXSUPtM7EBnAMRLt9lcMn/Save-this-Job?node-id=56%3A68
+1️⃣ [UX Design files]https://www.figma.com/file/kgXSUPtM7EBnAMRLt9lcMn/Save-this-Job?node-id=0%3A1
 
 Description of Save this Job project:
 
