@@ -43,9 +43,9 @@ Save this Job is a Chrome extension that lets you grab and save job postings wit
 
 ### 4️⃣ Key Features
 
--    feature one
--    feature two
--    feature three
+-    Use Chrome extensions from other sites
+-    Save job searches, all in one place
+-    Keep job searches organized
 -    feature four
 -    feature five
 
