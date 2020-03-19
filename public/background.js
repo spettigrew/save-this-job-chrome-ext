@@ -1,7 +1,7 @@
 chrome.runtime.onInstalled.addListener(function () {
   // This is where we create the context menu that's available through left click in the browser
   chrome.contextMenus.create({
-    id: "Job Book",
+    id: "Save this Job",
     title: "Save Job Url",
     contexts: ['all']
   })
