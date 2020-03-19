@@ -1,32 +1,31 @@
 {
-  "name": "Job Book",
+  "name": "Save this Job",
   "manifest_version": 2,
   "version": "0.0.1",
   "description": "A Chrome extension that allows users to save job URL's with a user-facing dashboard that displays saved URL's. Users can login and register from both the front-end and the extension.",
   "content_scripts": [{
-    "js": [],
-    "matches": [],
-    "css": []
+    "js": ["contentScript.js"],
+    "matches": ["https://*.indeed.com/*"],
+    "css": ["App.css"]
   }],
   "background": {
     "scripts": ["background.js"],
     "persistent": false
   },
-  "page_action": {
-    "default_popup": {},
+  "browser_action": {
     "default_icon": {
-      "16": "",
-      "32": "",
-      "48": "",
-      "128": ""
+      "16": "./images/Icon16.png",
+      "32": "./images/Icon32.png",
+      "48": "./images/Icon48.png",
+      "128": "./images/Icon128.png"
     }
   },
-  "icons": {
-    "16": "",
-    "32": "",
-    "48": "",
-    "128": ""
-  },
+  "icons": [{
+    "16": "./images/Icon16.png",
+    "32": "./images/Icon32.png",
+    "48": "./images/Icon48.png",
+    "128": "./images/Icon128.png"
+  }],
   "permissions": ["contextMenus", "tabs", "storage", "activeTab"],
   "content_security_policy": "script-src 'self' 'sha256-ILo8Sg5ameOh7EJPaZmIQYqDkAozAPY56yCIVu/8hPo='; object-src 'self'",
   "web_accessible_resources" : ["*.html", "*.png", "*.js"]
