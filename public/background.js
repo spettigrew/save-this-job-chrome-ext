@@ -3,7 +3,7 @@ chrome.runtime.onInstalled.addListener(function () {
   chrome.contextMenus.create({
     id: "Job Book",
     title: "Save Job Url",
-    contexts: ['all']
+    contexts: ['frame', 'page']
   })
 
   chrome.contextMenus.onClicked.addListener(() => {
@@ -18,4 +18,16 @@ chrome.runtime.onInstalled.addListener(function () {
       })
     })
   })
+  chrome.runtime.onMessage.addListener(request => {
+    if (request.type === "getToken") {
+      chrome.tabs.create({ 'url': 'http://localhost:3000/login' }, function (tab) {
+        console.log("new", tab)
+        chrome.tabs.sendMessage(tab[0].id, {
+          type: "getTokenFromLocalStorage"
+        })
+      })
+    }
+  })
 })
+
+
