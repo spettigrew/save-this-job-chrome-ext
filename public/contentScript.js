@@ -2,7 +2,7 @@ chrome.runtime.onMessage.addListener(request => {
   if (request.type === "getUrl") {
     chrome.storage.sync.get(['token'], function(result) {
       if (result.token === undefined) {
-        return console.log('redirected here')
+        return chrome.runtime.sendMessage({type: "getToken"}) 
       }
     });
     console.log(request.title)
@@ -17,6 +17,10 @@ chrome.runtime.onMessage.addListener(request => {
     const iframe = document.getElementById("jobSave")
     iframe.src = chrome.runtime.getURL('./index.html')
     iframe.frameBorder = 0;
+  }
+
+  if (request.type === "getTokenFromLocalStorage") {
+    
   }
 })
 
