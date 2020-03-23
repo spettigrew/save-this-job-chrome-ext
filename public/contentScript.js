@@ -6,7 +6,7 @@ chrome.runtime.onMessage.addListener(request => {
       if (result.email === undefined) {
         return chrome.runtime.sendMessage({ type: "getToken" })
       }
-      const url = ""
+      const url = "http://localhost:8080"
       const data = { title: request.title, url: request.url }
       const otherParam = {
         headers: {
