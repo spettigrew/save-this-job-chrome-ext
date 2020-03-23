@@ -14,10 +14,9 @@
   },
   "icons": {
     "16": "./images/icon16.png",
-    "24": "./images/icon24.png",
+    "24": "./images/icon24.png",           
     "32": "./images/icon32.png",
-    "48": "./images/icon48.png",
-    "128": "./images/icon128.png"
+    "48": "./images/icon48.png"
   },
   "permissions": ["contextMenus", "tabs", "storage", "activeTab"],
   "content_security_policy": "script-src 'self' 'sha256-eIy+ZFmUSgAl2hneWuGKuPlIoZulI0x+WlWHlAkasAM='; object-src 'self'",
