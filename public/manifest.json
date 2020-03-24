@@ -18,7 +18,7 @@
     "32": "./images/icon32.png",
     "48": "./images/icon48.png"
   },
-  "permissions": ["contextMenus", "tabs", "storage", "activeTab"],
+  "permissions": ["contextMenus", "tabs", "storage", "activeTab", "http://localhost:8080/jobPosts/addJob"],
   "content_security_policy": "script-src 'self' 'sha256-eIy+ZFmUSgAl2hneWuGKuPlIoZulI0x+WlWHlAkasAM='; object-src 'self'",
   "web_accessible_resources" : ["*.html", "*.png", "*.js", "*.css"]
 }

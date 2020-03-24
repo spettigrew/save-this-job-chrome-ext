@@ -1,28 +1,30 @@
 chrome.runtime.onMessage.addListener(request => {
   if (request.type === "getUrl") {
-    chrome.storage.local.get('email', function (result) {
-      console.log(result.email)
-      
-      if (result.email === undefined) {
+    chrome.storage.local.get('token', function (result) {
+      const accessToken = result.token
+
+      if (result.token === undefined) {
         return chrome.runtime.sendMessage({ type: "getToken" })
       }
-      const url = ""
-      const data = { title: request.title, url: request.url }
-      const otherParam = {
+      const data = { jobTitle: request.title, url: request.url };
+      
+      fetch('http://localhost:8080/users/addJob', {
+        method: 'POST', 
         headers: {
-          "content-type": "application/json; charset=UTF-8"
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
         },
-        body: data,
-        method: "POST"
-      }
-
-      fetch(url, otherParam)
-        .then(data => { return data.json() })
-        .then(res => {
-          console.log(res)
-         
+        body: JSON.stringify(data),
+      })
+        .then((response) => {
+          return response.json()
         })
-        .catch(err => console.log(err))
+        .then((data) => {
+          console.log('Success:', data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
     });
   }
 
@@ -43,6 +45,7 @@ chrome.runtime.onMessage.addListener(request => {
     iframe.frameBorder = 0;
   }
 })
+
 
 const setToken = () => {
   const email = localStorage.getItem('email')
