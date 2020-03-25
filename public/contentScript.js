@@ -7,9 +7,9 @@ chrome.runtime.onMessage.addListener(request => {
         return chrome.runtime.sendMessage({ type: "getToken" })
       }
       const data = { jobTitle: request.title, url: request.url };
-      
+
       fetch('http://localhost:8080/users/addJob', {
-        method: 'POST', 
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${accessToken}`
@@ -20,7 +20,17 @@ chrome.runtime.onMessage.addListener(request => {
           return response.json()
         })
         .then((data) => {
-          console.log('Success:', data);
+          if (data.message === "Job Post Created") {
+            
+            const modal = document.createElement('iframe');
+            modal.setAttribute("style", "border: none; display: block; height: 60%; width: 200px; overflow: hidden; position: fixed; right: 0px; top: 0px; left: auto; float: none; width: auto; z-index: 2147483647; background: transparent;")
+            modal.id = "jobSave"
+            document.body.appendChild(modal)
+
+            const iframe = document.getElementById("jobSave")
+            iframe.src = chrome.runtime.getURL('./index.html')
+            iframe.frameBorder = 0;
+          }
         })
         .catch((error) => {
           console.error('Error:', error);
@@ -35,24 +45,14 @@ chrome.runtime.onMessage.addListener(request => {
   }
 
   if (request.type === "sign-out") {
-    const modal = document.createElement('iframe');
-    modal.setAttribute("style", "border: none; display: block; height: 60%; width: 200px; overflow: hidden; position: fixed; right: 0px; top: 0px; left: auto; float: none; width: auto; z-index: 2147483647; background: transparent;")
-    modal.id = "jobSave"
-    document.body.appendChild(modal)
 
-    const iframe = document.getElementById("jobSave")
-    iframe.src = chrome.runtime.getURL('./index.html')
-    iframe.frameBorder = 0;
   }
 })
 
 
 const setToken = () => {
-  const email = localStorage.getItem('email')
   const token = localStorage.getItem('token')
-  chrome.storage.local.set({ email, token }, function () {
-    console.log("Email is set to ", email)
-  });
+  chrome.storage.local.set({ token });
 }
 
 
