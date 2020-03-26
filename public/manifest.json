@@ -2,7 +2,7 @@
   "name": "Save This Job",
   "manifest_version": 2,
   "version": "0.0.1",
-  "description": "A Chrome extension that allows users to save job URL's with a user-facing dashboard that displays saved URL's. Users can login and register from both the front-end and the extension.",
+  "description": "A Chrome extension that allows users to save job URL's with a user-facing dashboard that displays saved URL's. Users can login/register from the front-end.",
   "content_scripts": [{
     "js": ["contentScript.js"],
     "matches": ["*://*.indeed.com/*", "http://localhost:3000/*"],
