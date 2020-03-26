@@ -1,19 +1,34 @@
+// This function is needed because we have background persist set to false in the manifest
 chrome.runtime.onInstalled.addListener(function () {
   // This is where we create the context menu that's available through left click in the browser
+
   chrome.contextMenus.create({
     id: "First",
-    title: "Save this Job Url",
-    contexts: ['all']
+    title: "Save Job Post",
+    contexts: ['all'],
   })
 
-  chrome.contextMenus.create({
-    id: "Second",
-    title: "Sign Out",
-    contexts: ['all']
+  chrome.storage.local.get('token', result => {
+    if (result.token) {
+      chrome.contextMenus.create({
+        id: "Second",
+        title: "Sign-Out",
+        contexts: ['all'],
+        visible: true
+      })
+    } else {
+      chrome.contextMenus.create({
+        id: "Second",
+        title: "Sign-Out",
+        contexts: ['all'],
+        visible: false
+      })
+    }
   })
+
 
   chrome.contextMenus.onClicked.addListener((info, tab) => {
-    // This is where we add an event listener to listen for when a user clicks on our context menu item we created above and sends a message to the current tab with the url and title
+    // This is where we add a event listener for when a user clicks on our context menu items we created above and sends a message to the current tab with the url and title
     if (tab) {
       if (info.menuItemId === "First") {
         chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
@@ -26,36 +41,63 @@ chrome.runtime.onInstalled.addListener(function () {
           })
         })
       }
+      // Listen for when the sign-in radio button is clicked
+      // if (info.menuItemId === "Second") {
+      //   if (info.checked) {
+      //     chrome.storage.local.get('token', result => {
+      //       if (!result.token) {
+      //         return login()
+      //       } else {
+      //         return null
+      //       }
+      //     })
+      //   } else {
+      //     signOut()
+      //   }
+      // }
+      // Listen for when the sign-out radio button is clicked
       if (info.menuItemId === "Second") {
-        chrome.storage.local.clear(function () {
-          console.log('You have signed out successfully')
-        })
-        chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-          chrome.tabs.sendMessage(tabs[0].id, {
-            type: "sign-out",
-          })
+        chrome.storage.local.get('token', result => {
+          if (result.token) {
+             return signOut()
+          } else {
+            return chrome.contextMenus.update('Second', {visible: false})
+          }
         })
       }
     }
+
   })
 
   chrome.runtime.onMessage.addListener(request => {
     if (request.type === "getToken") {
-      chrome.tabs.create({ 'url': 'http://localhost:3000/login' }, function () {
+      return login()
+    }
+
+    // if (request.type === "displaySignOut") {
+    //   return chrome.contextMenus.update('Second', {visible: true})
+    // }
+  })
+
+  function login() {
+    chrome.tabs.create({ 'url': 'http://localhost:3000/login' }, function () {
+      chrome.contextMenus.update('Second', {visible: true}, function() {
         chrome.tabs.onUpdated.addListener(() => {
           chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
             const tabId = tabs[0].id
-            const tabLink = tabs[0].url
-            chrome.tabs.sendMessage(tabId, {
-              type: "getTokenFromStorage",
-              id: tabId,
-              url: tabLink
-            })
+            chrome.tabs.sendMessage(tabId, {type: "getTokenFromStorage"})
           })
         })
       })
-    }
-  })
+    })
+  }
+
+  function signOut() {
+    chrome.storage.local.clear(function () {
+      console.log('chrome storage cleared successfully')
+      return chrome.contextMenus.update('Second', {visible: false})
+    })
+  }
 })
 
 
