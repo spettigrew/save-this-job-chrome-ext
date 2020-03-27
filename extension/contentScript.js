@@ -20,15 +20,17 @@ chrome.runtime.onMessage.addListener(request => {
         })
         .then((data) => {
           if (data.message === "Job Post Created") {
+            return chrome.runtime.sendMessage({ type: "jobSaveSuccess" })
+            
+            // const modal = document.createElement('iframe');
+            // modal.setAttribute("style", "border: none; display: block; height: 60%; width: 200px; overflow: hidden; position: fixed; right: 0px; top: 0px; left: auto; float: none; width: auto; z-index: 2147483647; background: transparent;")
+            // modal.id = "jobSave"
+            // document.body.appendChild(modal)
 
-            const modal = document.createElement('iframe');
-            modal.setAttribute("style", "border: none; display: block; height: 60%; width: 200px; overflow: hidden; position: fixed; right: 0px; top: 0px; left: auto; float: none; width: auto; z-index: 2147483647; background: transparent;")
-            modal.id = "jobSave"
-            document.body.appendChild(modal)
+            // const iframe = document.getElementById("jobSave")
+            // iframe.src = chrome.runtime.getURL('./index.html')
+            // iframe.frameBorder = 0;
 
-            const iframe = document.getElementById("jobSave")
-            iframe.src = chrome.runtime.getURL('./index.html')
-            iframe.frameBorder = 0;
           }
 
           if (data === "Jwt is expired") {

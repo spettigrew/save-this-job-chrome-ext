@@ -1,0 +1,34 @@
+{
+  "name": "Save This Job",
+  "manifest_version": 2,
+  "version": "0.0.6",
+  "description": "A Chrome extension that allows users to save job URL's from indeed.com.",
+  "content_scripts": [{
+    "js": ["contentScript.js"],
+    "matches": ["http://www.indeed.com/*", "https://www.indeed.com/*", "http://localhost:3000/*"]
+  }],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "page_action": {
+    "default_icon": {
+      "16": "./images/icon128.png",
+      "24": "./images/icon24.png",           
+      "32": "./images/icon32.png",
+      "48": "./images/icon48.png",
+      "128": "./images/icon128.png"
+    },
+    "default_title": "Save This Job"
+  },
+  "icons": {
+    "16": "./images/icon128.png",
+    "24": "./images/icon24.png",           
+    "32": "./images/icon32.png",
+    "48": "./images/icon48.png",
+    "128": "./images/icon128.png"
+  },
+  "permissions": ["contextMenus", "tabs", "storage", "activeTab", "http://localhost:8080/jobPosts/addJob", "notifications"],
+  "content_security_policy": "script-src 'self' 'sha256-eIy+ZFmUSgAl2hneWuGKuPlIoZulI0x+WlWHlAkasAM='; object-src 'self'",
+  "web_accessible_resources" : ["*.html", "*.png", "*.js", "*.css"]
+}
