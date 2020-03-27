@@ -68,6 +68,16 @@ chrome.runtime.onMessage.addListener(request => {
     }
     return chrome.notifications.create(notificationOptions)
   }
+
+  if (request.type === "Error") {
+    const notificationOptions = {
+      type: "basic",
+      iconUrl: "./images/icon48.png",
+      title: "Job Save Error",
+      message: "There was a problem saving your job post to the database. Please try again later."
+    }
+    return chrome.notifications.create(notificationOptions)
+  }
 })
 
 function login() {
