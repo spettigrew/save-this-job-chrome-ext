@@ -5,9 +5,11 @@ chrome.runtime.onMessage.addListener(request => {
         return chrome.runtime.sendMessage({ type: "getToken" })
       }
       const accessToken = result.token
-      const logo = document.querySelector('#vjs-img-cmL') || document.querySelector('.vjs-JobInfoHeader-logo-container img')
-      const title = document.querySelector('#vjs-jobtitle').textContent || ""
-      const data = { jobTitle: title, url: request.url, logo: logo.src };
+      const defaultLogo = document.createElement('img')
+      defaultLogo.src = 'https://picsum.photos/200'
+      const logo = document.querySelector('#vjs-img-cmL') || document.querySelector('.vjs-JobInfoHeader-logo-container img') || document.querySelector('.jobsearch-CompanyAvatar-image') || defaultLogo
+      const title = document.querySelector('#vjs-jobtitle') || document.querySelector('.jobsearch-JobInfoHeader-title-container h3')
+      const data = { jobTitle: title.textContent, url: request.url, logo: logo.src };
 
       fetch('http://localhost:8080/users/addJob', {
         method: 'POST',
