@@ -5,7 +5,9 @@ chrome.runtime.onMessage.addListener(request => {
         return chrome.runtime.sendMessage({ type: "getToken" })
       }
       const accessToken = result.token
-      const data = { jobTitle: request.title, url: request.url };
+      const logo = document.querySelector('#vjs-img-cmL') || document.querySelector('.vjs-JobInfoHeader-logo-container img')
+      const title = document.querySelector('#vjs-jobtitle').textContent || ""
+      const data = { jobTitle: title, url: request.url, logo: logo.src };
 
       fetch('http://localhost:8080/users/addJob', {
         method: 'POST',
@@ -21,10 +23,9 @@ chrome.runtime.onMessage.addListener(request => {
         .then((data) => {
           if (data.message === "Job Post Created") {
             return chrome.runtime.sendMessage({ type: "jobSaveSuccess" })
-          }
-
-          if (data === "Jwt is expired") {
-            return chrome.runtime.sendMessage({ type: "getToken" })
+          } 
+          if (data.status === 401) {
+            return chrome.runtime.sendMessage({ type: "getToken"})
           }
         })
         .catch((error) => {
@@ -45,7 +46,9 @@ chrome.runtime.onMessage.addListener(request => {
 
 const setToken = () => {
   const token = localStorage.getItem('token')
-  return chrome.storage.local.set({ token })
+  chrome.storage.local.set({ token }, () => {
+    chrome.runtime.sendMessage({ type: "tokenSet" })
+  })
 }
 
 
