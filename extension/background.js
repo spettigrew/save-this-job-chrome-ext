@@ -11,14 +11,26 @@ chrome.storage.local.get('token', result => {
   if (result.token) {
     chrome.contextMenus.create({
       id: "Second",
-      title: "Sign-Out",
+      title: "Logout",
       contexts: ['all'],
       visible: true
     })
+    chrome.contextMenus.create({
+      id: "Third",
+      title: "Login",
+      contexts: ['all'],
+      visible: false
+    })
   } else {
     chrome.contextMenus.create({
+      id: "Third",
+      title: "Login",
+      contexts: ['all'],
+      visible: true
+    })
+    chrome.contextMenus.create({
       id: "Second",
-      title: "Sign-Out",
+      title: "Logout",
       contexts: ['all'],
       visible: false
     })
@@ -50,8 +62,17 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         }
       })
     }
-  }
 
+    if (info.menuItemId === "Third") {
+      chrome.storage.local.get('token', result => {
+        if (!result.token) {
+          return login()
+        } else {
+          return chrome.contextMenus.update('Third', { visible: true })
+        }
+      })
+    }
+  }
 })
 
 chrome.runtime.onMessage.addListener(request => {
@@ -68,16 +89,30 @@ chrome.runtime.onMessage.addListener(request => {
     }
     return chrome.notifications.create(notificationOptions)
   }
+
+  if (request.type === "Error") {
+    const notificationOptions = {
+      type: "basic",
+      iconUrl: "./images/icon48.png",
+      title: "Job Save Error",
+      message: "There was a problem saving your job post to the database. Please try again later."
+    }
+    return chrome.notifications.create(notificationOptions)
+  }
+
+  if (request.type === "tokenSet") {
+    chrome.contextMenus.update('Second', { visible: true }, function () {
+      chrome.contextMenus.update('Third', { visible: false })
+    })
+  }
 })
 
 function login() {
   chrome.tabs.create({ 'url': 'http://localhost:3000/login' }, function () {
-    chrome.contextMenus.update('Second', { visible: true }, function () {
-      chrome.tabs.onUpdated.addListener(() => {
-        chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-          const tabId = tabs[0].id
-          chrome.tabs.sendMessage(tabId, { type: "getTokenFromStorage" })
-        })
+    chrome.tabs.onUpdated.addListener(() => {
+      chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+        const tabId = tabs[0].id
+        chrome.tabs.sendMessage(tabId, { type: "getTokenFromStorage" })
       })
     })
   })
@@ -85,14 +120,16 @@ function login() {
 
 function signOut() {
   chrome.storage.local.clear(function () {
-    chrome.contextMenus.update('Second', { visible: false }, function () {
-      const notificationOptions = {
-        type: "basic",
-        iconUrl: "./images/icon48.png",
-        title: "Sign-Out Success!",
-        message: "Your are now logged off. Try saving a new job to log back in!"
-      }
-      return chrome.notifications.create(notificationOptions)
+    chrome.contextMenus.update('Third', { visible: true }, function () {
+      chrome.contextMenus.update('Second', { visible: false }, function () {
+        const notificationOptions = {
+          type: "basic",
+          iconUrl: "./images/icon48.png",
+          title: "Sign-Out Success!",
+          message: "Your are now logged off. Try saving a new job to log back in!"
+        }
+        return chrome.notifications.create(notificationOptions)
+      })
     })
   })
 }

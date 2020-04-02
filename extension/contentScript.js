@@ -5,7 +5,11 @@ chrome.runtime.onMessage.addListener(request => {
         return chrome.runtime.sendMessage({ type: "getToken" })
       }
       const accessToken = result.token
-      const data = { jobTitle: request.title, url: request.url };
+      const defaultLogo = document.createElement('img')
+      defaultLogo.src = 'https://picsum.photos/200'
+      const logo = document.querySelector('#vjs-img-cmL') || document.querySelector('.vjs-JobInfoHeader-logo-container img') || document.querySelector('.jobsearch-CompanyAvatar-image') || defaultLogo
+      const title = document.querySelector('#vjs-jobtitle') || document.querySelector('.jobsearch-JobInfoHeader-title-container h3')
+      const data = { jobTitle: title.textContent, url: request.url, logo: logo.src };
 
       fetch('http://localhost:8080/users/addJob', {
         method: 'POST',
@@ -21,24 +25,14 @@ chrome.runtime.onMessage.addListener(request => {
         .then((data) => {
           if (data.message === "Job Post Created") {
             return chrome.runtime.sendMessage({ type: "jobSaveSuccess" })
-            
-            // const modal = document.createElement('iframe');
-            // modal.setAttribute("style", "border: none; display: block; height: 60%; width: 200px; overflow: hidden; position: fixed; right: 0px; top: 0px; left: auto; float: none; width: auto; z-index: 2147483647; background: transparent;")
-            // modal.id = "jobSave"
-            // document.body.appendChild(modal)
-
-            // const iframe = document.getElementById("jobSave")
-            // iframe.src = chrome.runtime.getURL('./index.html')
-            // iframe.frameBorder = 0;
-
-          }
-
-          if (data === "Jwt is expired") {
-            return chrome.runtime.sendMessage({ type: "getToken" })
+          } 
+          if (data.status === 401) {
+            return chrome.runtime.sendMessage({ type: "getToken"})
           }
         })
         .catch((error) => {
           console.error('Error:', error);
+          chrome.runtime.sendMessage({ type: "Error" })
         });
     });
   }
@@ -54,7 +48,9 @@ chrome.runtime.onMessage.addListener(request => {
 
 const setToken = () => {
   const token = localStorage.getItem('token')
-  return chrome.storage.local.set({ token })
+  chrome.storage.local.set({ token }, () => {
+    chrome.runtime.sendMessage({ type: "tokenSet" })
+  })
 }
 
 
