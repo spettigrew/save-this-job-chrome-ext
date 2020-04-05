@@ -4,12 +4,20 @@ chrome.runtime.onMessage.addListener(request => {
       if (result.token === undefined) {
         return chrome.runtime.sendMessage({ type: "getToken" })
       }
+
       const accessToken = result.token
-      const defaultLogo = document.createElement('img')
-      defaultLogo.src = 'https://picsum.photos/200'
-      const logo = document.querySelector('#vjs-img-cmL') || document.querySelector('.vjs-JobInfoHeader-logo-container img') || document.querySelector('.jobsearch-CompanyAvatar-image') || defaultLogo
+      const logo = document.querySelector('#vjs-img-cmL') || document.querySelector('.vjs-JobInfoHeader-logo-container img') || document.querySelector('.jobsearch-CompanyAvatar-image') || null
       const title = document.querySelector('#vjs-jobtitle') || document.querySelector('.jobsearch-JobInfoHeader-title-container h3')
-      const data = { jobTitle: title.textContent, url: request.url, logo: logo.src };
+      const company = document.querySelector('#vjs-cn a') || document.querySelector('#vjs-cn') || document.querySelector('.icl-u-lg-mr--sm a') || document.querySelector('.icl-u-lg-mr--sm')
+      setCompanyName(company)
+
+      const data = {
+        jobTitle: title.textContent,
+        url: request.url,
+        logo: logo ? logo.src : null,
+        companyTitle: company.info ? company.info.company : company.name,
+        companyUrl: company.info ? company.info.companyUrl : null,
+      }
 
       fetch('http://localhost:8080/users/addJob', {
         method: 'POST',
@@ -23,11 +31,11 @@ chrome.runtime.onMessage.addListener(request => {
           return response.json()
         })
         .then((data) => {
+          if (data === 'Jwt is expired') {
+            return chrome.runtime.sendMessage({ type: "getToken" })
+          }
           if (data.message === "Job Post Created") {
             return chrome.runtime.sendMessage({ type: "jobSaveSuccess" })
-          } 
-          if (data.status === 401) {
-            return chrome.runtime.sendMessage({ type: "getToken"})
           }
         })
         .catch((error) => {
@@ -52,5 +60,17 @@ const setToken = () => {
     chrome.runtime.sendMessage({ type: "tokenSet" })
   })
 }
+
+const setCompanyName = (company) => {
+  if (company.href) {
+    company.info = { company: company.textContent, companyUrl: company.href }
+    return company.info
+  } else {
+    company.name = company.textContent
+    return company.name
+  }
+}
+
+
 
 
