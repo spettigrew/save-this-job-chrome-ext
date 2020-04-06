@@ -1,14 +1,19 @@
 
 // This is where we create the context menu that's available through left click in the browser
-
-chrome.contextMenus.create({
-  id: "First",
-  title: "Save Job Post",
-  contexts: ['all'],
-})
-
 chrome.storage.local.get('token', result => {
   if (result.token) {
+    chrome.contextMenus.create({
+      id: "First",
+      title: "Add Job Post",
+      contexts: ['all'],
+      visible: true
+    })
+    chrome.contextMenus.create({
+      id: "Fourth",
+      title: "View Dashboard",
+      contexts: ['all'],
+      visible: true
+    })
     chrome.contextMenus.create({
       id: "Second",
       title: "Logout",
@@ -21,6 +26,7 @@ chrome.storage.local.get('token', result => {
       contexts: ['all'],
       visible: false
     })
+   
   } else {
     chrome.contextMenus.create({
       id: "Third",
@@ -31,6 +37,18 @@ chrome.storage.local.get('token', result => {
     chrome.contextMenus.create({
       id: "Second",
       title: "Logout",
+      contexts: ['all'],
+      visible: false
+    })
+    chrome.contextMenus.create({
+      id: "Fourth",
+      title: "View Dashboard",
+      contexts: ['all'],
+      visible: false
+    })
+    chrome.contextMenus.create({
+      id: "First",
+      title: "Add Job Post",
       contexts: ['all'],
       visible: false
     })
@@ -72,6 +90,16 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         }
       })
     }
+
+    if (info.menuItemId === "Fourth") {
+      chrome.storage.local.get('token', result => {
+        if (result.token) {
+          return chrome.tabs.create({ 'url': 'http://localhost:3000/dashboard' })
+        } else {
+          return chrome.contextMenus.update('Fourth', { visible: true })
+        }
+      })
+    }
   }
 })
 
@@ -102,7 +130,11 @@ chrome.runtime.onMessage.addListener(request => {
 
   if (request.type === "tokenSet") {
     chrome.contextMenus.update('Second', { visible: true }, function () {
-      chrome.contextMenus.update('Third', { visible: false })
+      chrome.contextMenus.update('Third', { visible: false }, function () {
+        chrome.contextMenus.update('Fourth', { visible: true }, function () {
+          chrome.contextMenus.update('First', { visible: true })
+        })
+      })
     })
   }
 })
@@ -122,13 +154,17 @@ function signOut() {
   chrome.storage.local.clear(function () {
     chrome.contextMenus.update('Third', { visible: true }, function () {
       chrome.contextMenus.update('Second', { visible: false }, function () {
-        const notificationOptions = {
-          type: "basic",
-          iconUrl: "./images/icon48.png",
-          title: "Sign-Out Success!",
-          message: "Your are now logged off. Try saving a new job to log back in!"
-        }
-        return chrome.notifications.create(notificationOptions)
+        chrome.contextMenus.update('Fourth', { visible: false }, function () {
+          chrome.contextMenus.update('First', { visible: false }, function () {
+            const notificationOptions = {
+              type: "basic",
+              iconUrl: "./images/icon48.png",
+              title: "Sign-Out Success!",
+              message: "Your are now logged off. Try saving a new job to log back in!"
+            }
+            return chrome.notifications.create(notificationOptions)
+          })
+        })
       })
     })
   })
