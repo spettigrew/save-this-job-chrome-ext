@@ -40,7 +40,7 @@
     "tabs",
     "storage",
     "activeTab",
-    "http://localhost:8080/jobPosts/addJob",
+    "https://staging-save-this-job.herokuapp.com/jobPosts/addJob",
     "notifications"
   ],
   "content_security_policy": "script-src 'self' 'sha256-eIy+ZFmUSgAl2hneWuGKuPlIoZulI0x+WlWHlAkasAM='; object-src 'self'",

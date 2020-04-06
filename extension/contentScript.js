@@ -29,7 +29,7 @@ chrome.runtime.onMessage.addListener((request) => {
         companyUrl: company.info ? company.info.companyUrl : null,
       };
 
-      fetch('http://localhost:8080/users/addJob', {
+      fetch('https://staging-save-this-job.herokuapp.com/users/addJob', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
