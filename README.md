@@ -4,11 +4,11 @@
 
 🚫 Each student has a required minimum number of meaningful PRs each week per the rubric. Contributing to docs does NOT count as a PR to meet your weekly requirements.
 
-# 1️⃣ Job Book
+# 1️⃣ Save this Job
 
-1️⃣ You can find the deployed project at [🚫URL NAME GOES HERE](🚫copy and paste URL here).
+1️⃣ You can find the deployed project at https://www.savethisjob.com/
 
-## Job Book Contributors
+## Save this Job Contributors
 
 🚫Add contributor info below, make sure add images and edit the social links for each member. Add to or delete these place-holders as needed
 
@@ -28,24 +28,24 @@
 
 🚫 more info on using badges [here](https://github.com/badges/shields)
 
-## Project Overview
+## Save this Job Project Overview
 
 1️⃣ [Trello Board]https://trello.com/b/cvKexAA0/labspt8-job-book
 
-1️⃣ [Product Canvas]https://www.notion.so/Job-Book-d479015f772845d8b86099d2a9acb252
+1️⃣ [Product Canvas]https://www.notion.so/Save-this-Job-d479015f772845d8b86099d2a9acb252
 
-1️⃣ [UX Design files]https://www.figma.com/file/kgXSUPtM7EBnAMRLt9lcMn/Job-Book?node-id=0%3A1
+1️⃣ [UX Design files]https://www.figma.com/file/kgXSUPtM7EBnAMRLt9lcMn/Save-this-Job?node-id=0%3A1
 
-Description of Job Book project:
+Description of Save this Job project:
 
-Job Boos is a Chrome extension that lets you grab and save job postings with a rating of how interested you are in the job.
+Save this Job is a Chrome extension that lets you grab and save job postings with a rating of how interested you are in the job.
 
 
 ### 4️⃣ Key Features
 
--    feature one
--    feature two
--    feature three
+-    Use Chrome extensions from other sites
+-    Save job searches, all in one place
+-    Keep job searches organized
 -    feature four
 -    feature five
 
@@ -189,5 +189,5 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
-See [Backend Documentation](🚫_link to your backend readme here_) for details on the backend of our project.
+See [Backend Documentation] https://github.com/Lambda-School-Labs/job-book-be/blob/master/README.mdfor details on the backend of our project.
 
