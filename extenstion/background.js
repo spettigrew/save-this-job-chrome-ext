@@ -2,51 +2,80 @@
 chrome.storage.local.get('token', (result) => {
   if (result.token) {
     chrome.contextMenus.create({
-      id: 'First',
-      title: 'Add Job Post',
-      contexts: ['all'],
-      visible: true,
-    });
-    chrome.contextMenus.create({
-      id: 'Fourth',
+      id: 'ViewDashboard',
       title: 'View Dashboard',
       contexts: ['all'],
       visible: true,
     });
     chrome.contextMenus.create({
-      id: 'Second',
+      id: 'logout',
       title: 'Logout',
       contexts: ['all'],
       visible: true,
     });
     chrome.contextMenus.create({
-      id: 'Third',
+      id: 'login',
       title: 'Login',
       contexts: ['all'],
       visible: false,
     });
+
+    chrome.tabs.onHighlighted.addListener(function () {
+      chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+        const tabUrl = tabs[0].url;
+        chrome.tabs.sendMessage(tabs[0].id, {
+          type: "sendUrl",
+          url: tabUrl
+        })
+      })
+    })
+
+    chrome.tabs.onCreated.addListener(function () {
+      chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+        const tabUrl = tabs[0].url;
+        chrome.tabs.sendMessage(tabs[0].id, {
+          type: "sendUrl",
+          url: tabUrl
+        })
+      })
+    })
+
+    chrome.tabs.onUpdated.addListener(function () {
+      chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+        const tabUrl = tabs[0].url;
+        chrome.tabs.sendMessage(tabs[0].id, {
+          type: "sendUrl",
+          url: tabUrl
+        })
+      })
+    })
+
+    chrome.tabs.onActivated.addListener(function () {
+      chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+        const tabUrl = tabs[0].url;
+        chrome.tabs.sendMessage(tabs[0].id, {
+          type: "sendUrl",
+          url: tabUrl
+        })
+      })
+    })
+
   } else {
     chrome.contextMenus.create({
-      id: 'Third',
+      id: 'login',
       title: 'Login',
       contexts: ['all'],
       visible: true,
     });
     chrome.contextMenus.create({
-      id: 'Second',
+      id: 'logout',
       title: 'Logout',
       contexts: ['all'],
       visible: false,
     });
     chrome.contextMenus.create({
-      id: 'Fourth',
+      id: 'ViewDashboard',
       title: 'View Dashboard',
-      contexts: ['all'],
-      visible: false,
-    });
-    chrome.contextMenus.create({
-      id: 'First',
-      title: 'Add Job Post',
       contexts: ['all'],
       visible: false,
     });
@@ -56,46 +85,35 @@ chrome.storage.local.get('token', (result) => {
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   // This is where we add a event listener for when a user clicks on our context menu items we created above and sends a message to the current tab with the url and title
   if (tab) {
-    if (info.menuItemId === 'First') {
-      chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-        const tabTitle = tabs[0].title;
-        const tabUrl = tabs[0].url;
-        chrome.tabs.sendMessage(tabs[0].id, {
-          type: 'getUrl',
-          title: tabTitle,
-          url: tabUrl,
-        });
-      });
-    }
 
-    if (info.menuItemId === 'Second') {
+    if (info.menuItemId === 'logout') {
       chrome.storage.local.get('token', (result) => {
         if (result.token) {
           return signOut();
         } else {
-          return chrome.contextMenus.update('Second', { visible: false });
+          return chrome.contextMenus.update('logout', { visible: false });
         }
       });
     }
 
-    if (info.menuItemId === 'Third') {
+    if (info.menuItemId === 'login') {
       chrome.storage.local.get('token', (result) => {
         if (!result.token) {
           return login();
         } else {
-          return chrome.contextMenus.update('Third', { visible: true });
+          return chrome.contextMenus.update('login', { visible: true });
         }
       });
     }
 
-    if (info.menuItemId === 'Fourth') {
+    if (info.menuItemId === 'ViewDashboard') {
       chrome.storage.local.get('token', (result) => {
         if (result.token) {
           return chrome.tabs.create({
             url: 'https://staging.d3d1q8nq7a3fmz.amplifyapp.com/dashboard',
           });
         } else {
-          return chrome.contextMenus.update('Fourth', { visible: true });
+          return chrome.contextMenus.update('ViewDashboard', { visible: true });
         }
       });
     }
@@ -129,11 +147,9 @@ chrome.runtime.onMessage.addListener((request) => {
   }
 
   if (request.type === 'tokenSet') {
-    chrome.contextMenus.update('Second', { visible: true }, function () {
-      chrome.contextMenus.update('Third', { visible: false }, function () {
-        chrome.contextMenus.update('Fourth', { visible: true }, function () {
-          chrome.contextMenus.update('First', { visible: true });
-        });
+    chrome.contextMenus.update('logout', { visible: true }, function () {
+      chrome.contextMenus.update('login', { visible: false }, function () {
+        chrome.contextMenus.update('ViewDashboard', { visible: true });
       });
     });
   }
@@ -157,20 +173,18 @@ function login() {
 
 function signOut() {
   chrome.storage.local.clear(function () {
-    chrome.contextMenus.update('Third', { visible: true }, function () {
-      chrome.contextMenus.update('Second', { visible: false }, function () {
-        chrome.contextMenus.update('Fourth', { visible: false }, function () {
-          chrome.contextMenus.update('First', { visible: false }, function () {
-            const notificationOptions = {
-              type: 'basic',
-              iconUrl: './images/icon48.png',
-              title: 'Sign-Out Success!',
-              message:
-                'Your are now logged off. Try saving a new job to log back in!',
-            };
-            return chrome.notifications.create(notificationOptions);
-          });
-        });
+    chrome.contextMenus.update('login', { visible: true }, function () {
+      chrome.contextMenus.update('logout', { visible: false }, function () {
+        chrome.contextMenus.update('ViewDashboard', { visible: false }, function () {
+          const notificationOptions = {
+            type: 'basic',
+            iconUrl: './images/icon48.png',
+            title: 'Sign-Out Success!',
+            message:
+              'Your are now logged off. Try saving a new job to log back in!',
+          };
+          return chrome.notifications.create(notificationOptions);
+        })
       });
     });
   });
