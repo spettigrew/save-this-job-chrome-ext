@@ -5,13 +5,14 @@
   "description": "A Chrome extension that allows users to save job posts from indeed.com.",
   "content_scripts": [
     {
-      "js": ["contentScript.js"],
+      "js": ["popup.js"],
       "matches": [
         "http://www.indeed.com/*",
         "https://www.indeed.com/*",
         "https://staging.d3d1q8nq7a3fmz.amplifyapp.com/*",
         "http://localhost:3000/*"
-      ]
+      ],
+      "css": ["index.css"]
     }
   ],
   "background": {
