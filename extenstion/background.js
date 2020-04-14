@@ -1,86 +1,88 @@
-// This is where we create the context menu that's available through left click in the browser
-chrome.storage.local.get('token', (result) => {
-  if (result.token) {
-    chrome.contextMenus.create({
-      id: 'ViewDashboard',
-      title: 'View Dashboard',
-      contexts: ['all'],
-      visible: true,
-    });
-    chrome.contextMenus.create({
-      id: 'logout',
-      title: 'Logout',
-      contexts: ['all'],
-      visible: true,
-    });
-    chrome.contextMenus.create({
-      id: 'login',
-      title: 'Login',
-      contexts: ['all'],
-      visible: false,
-    });
+chrome.runtime.onInstalled.addListener(function () {
+  chrome.storage.local.get('token', (result) => {
+    if (result.token) {
+      chrome.contextMenus.create({
+        id: 'ViewDashboard',
+        title: 'View Dashboard',
+        contexts: ['all'],
+        visible: true,
+      });
+      chrome.contextMenus.create({
+        id: 'logout',
+        title: 'Logout',
+        contexts: ['all'],
+        visible: true,
+      });
+      chrome.contextMenus.create({
+        id: 'login',
+        title: 'Login',
+        contexts: ['all'],
+        visible: false,
+      });
 
-    chrome.tabs.onHighlighted.addListener(function () {
-      chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-        const tabUrl = tabs[0].url;
-        chrome.tabs.sendMessage(tabs[0].id, {
-          type: "sendUrl",
-          url: tabUrl
+      chrome.tabs.onHighlighted.addListener(function () {
+        chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+          const tabUrl = tabs[0].url;
+          chrome.tabs.sendMessage(tabs[0].id, {
+            type: "sendUrl",
+            url: tabUrl
+          })
         })
       })
-    })
 
-    chrome.tabs.onCreated.addListener(function () {
-      chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-        const tabUrl = tabs[0].url;
-        chrome.tabs.sendMessage(tabs[0].id, {
-          type: "sendUrl",
-          url: tabUrl
+      chrome.tabs.onCreated.addListener(function () {
+        chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+          const tabUrl = tabs[0].url;
+          chrome.tabs.sendMessage(tabs[0].id, {
+            type: "sendUrl",
+            url: tabUrl
+          })
         })
       })
-    })
 
-    chrome.tabs.onUpdated.addListener(function () {
-      chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-        const tabUrl = tabs[0].url;
-        chrome.tabs.sendMessage(tabs[0].id, {
-          type: "sendUrl",
-          url: tabUrl
+      chrome.tabs.onUpdated.addListener(function () {
+        chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+          const tabUrl = tabs[0].url;
+          chrome.tabs.sendMessage(tabs[0].id, {
+            type: "sendUrl",
+            url: tabUrl
+          })
         })
       })
-    })
 
-    chrome.tabs.onActivated.addListener(function () {
-      chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-        const tabUrl = tabs[0].url;
-        chrome.tabs.sendMessage(tabs[0].id, {
-          type: "sendUrl",
-          url: tabUrl
+      chrome.tabs.onActivated.addListener(function () {
+        chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+          const tabUrl = tabs[0].url;
+          chrome.tabs.sendMessage(tabs[0].id, {
+            type: "sendUrl",
+            url: tabUrl
+          })
         })
       })
-    })
 
-  } else {
-    chrome.contextMenus.create({
-      id: 'login',
-      title: 'Login',
-      contexts: ['all'],
-      visible: true,
-    });
-    chrome.contextMenus.create({
-      id: 'logout',
-      title: 'Logout',
-      contexts: ['all'],
-      visible: false,
-    });
-    chrome.contextMenus.create({
-      id: 'ViewDashboard',
-      title: 'View Dashboard',
-      contexts: ['all'],
-      visible: false,
-    });
-  }
-});
+    } else {
+      chrome.contextMenus.create({
+        id: 'login',
+        title: 'Login',
+        contexts: ['all'],
+        visible: true,
+      });
+      chrome.contextMenus.create({
+        id: 'logout',
+        title: 'Logout',
+        contexts: ['all'],
+        visible: false,
+      });
+      chrome.contextMenus.create({
+        id: 'ViewDashboard',
+        title: 'View Dashboard',
+        contexts: ['all'],
+        visible: false,
+      });
+    }
+  });
+
+})
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   // This is where we add a event listener for when a user clicks on our context menu items we created above and sends a message to the current tab with the url and title
