@@ -202,10 +202,13 @@ document.querySelector(".open-button").addEventListener("click", (event) => {
   setCompanyName(company);
   const jobLocation =
     document.querySelector('#vjs-loc') ||
+    document.querySelectorAll(".icl-u-xs-mt--xs")[1].lastChild ||
     null
+    console.log(jobLocation)
 
   const description =
     document.querySelector('#vjs-desc') ||
+    document.querySelector('#jobDescriptionText') ||
     null
 
   chrome.storage.sync.get('url', function (result) {
@@ -287,6 +290,7 @@ chrome.runtime.onMessage.addListener(request => {
   if (request.type === 'sendUrl') {
     chrome.storage.sync.set({ url: request.url }, () => {
       console.log('url', request.url)
+      console.log("not here")
     })
   }
 
