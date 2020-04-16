@@ -1,4 +1,44 @@
 chrome.runtime.onInstalled.addListener(function () {
+  chrome.tabs.onHighlighted.addListener(function () {
+    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+      const tabUrl = tabs[0].url;
+      chrome.tabs.sendMessage(tabs[0].id, {
+        type: "sendUrl",
+        url: tabUrl
+      })
+    })
+  })
+
+  chrome.tabs.onCreated.addListener(function () {
+    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+      const tabUrl = tabs[0].url;
+      chrome.tabs.sendMessage(tabs[0].id, {
+        type: "sendUrl",
+        url: tabUrl
+      })
+    })
+  })
+
+  chrome.tabs.onUpdated.addListener(function () {
+    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+      const tabUrl = tabs[0].url;
+      chrome.tabs.sendMessage(tabs[0].id, {
+        type: "sendUrl",
+        url: tabUrl
+      })
+    })
+  })
+
+  chrome.tabs.onActivated.addListener(function () {
+    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+      const tabUrl = tabs[0].url;
+      chrome.tabs.sendMessage(tabs[0].id, {
+        type: "sendUrl",
+        url: tabUrl
+      })
+    })
+  })
+  
   chrome.storage.local.get('token', (result) => {
     if (result.token) {
       chrome.contextMenus.create({
@@ -19,46 +59,6 @@ chrome.runtime.onInstalled.addListener(function () {
         contexts: ['all'],
         visible: false,
       });
-
-      chrome.tabs.onHighlighted.addListener(function () {
-        chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-          const tabUrl = tabs[0].url;
-          chrome.tabs.sendMessage(tabs[0].id, {
-            type: "sendUrl",
-            url: tabUrl
-          })
-        })
-      })
-
-      chrome.tabs.onCreated.addListener(function () {
-        chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-          const tabUrl = tabs[0].url;
-          chrome.tabs.sendMessage(tabs[0].id, {
-            type: "sendUrl",
-            url: tabUrl
-          })
-        })
-      })
-
-      chrome.tabs.onUpdated.addListener(function () {
-        chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-          const tabUrl = tabs[0].url;
-          chrome.tabs.sendMessage(tabs[0].id, {
-            type: "sendUrl",
-            url: tabUrl
-          })
-        })
-      })
-
-      chrome.tabs.onActivated.addListener(function () {
-        chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-          const tabUrl = tabs[0].url;
-          chrome.tabs.sendMessage(tabs[0].id, {
-            type: "sendUrl",
-            url: tabUrl
-          })
-        })
-      })
 
     } else {
       chrome.contextMenus.create({
@@ -120,7 +120,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     }
   }
 });
-let tabId
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'getToken') {
     return login();
@@ -154,17 +154,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       });
     });
   }
-
-  if (request.from === "popup") {
-    tabId = sender.tab.id;
-  }
-  if (request.from === "monster") {
-    console.log('message received')
-    chrome.tabs.query({active: true, currentWindow: true}, function() {
-      chrome.tabs.sendMessage(tabId, {message: 'sent'});
-    });
-  }
-  chrome.tabs.sendMessage(tabId, request)
 });
 
 function login() {
