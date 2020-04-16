@@ -58,7 +58,6 @@ jobPostUrlLabel.textContent = 'Job Post Url'
 locationLabel.textContent = 'Location'
 jobDescription.textContent = 'Description'
 
-container.appendChild(form)
 form.appendChild(formTitle)
 formTitle.appendChild(formLogo)
 form.appendChild(companyLabel)
@@ -73,13 +72,14 @@ form.appendChild(jobDescription)
 form.appendChild(jobDescriptionInput)
 form.appendChild(submitButton)
 form.appendChild(closeButton)
+container.appendChild(form)
 
 window.document.body.appendChild(openButton)
 window.document.body.appendChild(container)
 
 const shadowRoot = container.attachShadow({ mode: 'open' });
-shadowRoot.innerHTML = `
-<style>
+const formStyle = document.createElement('style')
+formStyle.textContent = `
 body {font-family: Arial, Helvetica, sans-serif;}
 * {box-sizing: border-box;}
 
@@ -87,6 +87,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
   display: flex;
   justify-content: center;
 }
+
 /* Button used to open the contact form - fixed at the bottom of the page */
 .open-button {
   padding: 16px 20px;
@@ -123,7 +124,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 .form-container input[type=text], .form-container input[type=text] {
   width: 100%;
   padding: 15px;
-  margin: 5px 0 22px 0;
+  margin: 5px 0 22px 0 !important;
   border: none;
   background: #f1f1f1;
 }
@@ -131,7 +132,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 .form-container textarea {
   width: 100%;
   padding: 15px;
-  margin: 5px 0 22px 0;
+  margin: 5px 0 22px 0 !important;
   border: none;
   background: #f1f1f1;
   height: 100px;
@@ -167,7 +168,12 @@ body {font-family: Arial, Helvetica, sans-serif;}
   opacity: 1;
 }
 
-</style>`
+.form-container label {
+  font-size: 12px !important;
+  font-weight: bold;
+}
+`
+shadowRoot.appendChild(formStyle)
 shadowRoot.appendChild(form)
 
 
@@ -192,30 +198,33 @@ document.querySelector(".open-button").addEventListener("click", (event) => {
   const title =
     document.querySelector('#vjs-jobtitle') ||
     document.querySelector('.jobsearch-JobInfoHeader-title-container h3') ||
+    document.querySelector('.TitleText') ||
     null
   const company =
     document.querySelector('#vjs-cn a') ||
     document.querySelector('#vjs-cn') ||
     document.querySelector('.icl-u-lg-mr--sm a') ||
     document.querySelector('.icl-u-lg-mr--sm') ||
+    document.querySelector('.CompanyName') ||
     null
   setCompanyName(company);
   const jobLocation =
     document.querySelector('#vjs-loc') ||
-    document.querySelectorAll(".icl-u-xs-mt--xs")[1].lastChild ||
+    document.querySelectorAll(".icl-u-xs-mt--xs")[1] ||
+    document.querySelector('.Location') ||
     null
-    console.log(jobLocation)
 
   const description =
     document.querySelector('#vjs-desc') ||
     document.querySelector('#jobDescriptionText') ||
+    document.querySelector('.JobContent') ||
     null
 
   chrome.storage.sync.get('url', function (result) {
     jobPostUrlInput.value = result.url ? result.url : null
     jobTitleInput.value = title ? title.textContent : null
     companyInput.value = company ? company.info.company : null
-    locationInput.value = jobLocation ? jobLocation.textContent : null
+    locationInput.value = jobLocation ? jobLocation.lastChild.textContent : null
     jobDescriptionInput.value = description ? description.innerText : null
   });
   container.style.display = "block";
@@ -226,8 +235,11 @@ shadowRoot.querySelector(".cancel").addEventListener("click", (event) => {
   container.style.display = "none";
 })
 
-shadowRoot.querySelector('#saveJob').addEventListener("click", (event) => {
+
+const addJob = shadowRoot.querySelector('#saveJob')
+addJob.addEventListener("click", (event) => {
   event.preventDefault()
+  addJob.innerHTML = 'Loading...'
   const logo =
     document.querySelector('#vjs-img-cmL') ||
     document.querySelector('.vjs-JobInfoHeader-logo-container img') ||
@@ -237,61 +249,60 @@ shadowRoot.querySelector('#saveJob').addEventListener("click", (event) => {
     document.querySelector('#vjs-cn a') ||
     document.querySelector('#vjs-cn') ||
     document.querySelector('.icl-u-lg-mr--sm a') ||
-    document.querySelector('.icl-u-lg-mr--sm');
+    document.querySelector('.icl-u-lg-mr--sm') ||
+    document.querySelector('.CompanyName') ||
+    null;
   setCompanyName(company);
-  const jobLocation =
-    document.querySelector('#vjs-loc')
-
-  const description =
-    document.querySelector('#vjs-desc')
 
   chrome.storage.local.get('token', function (result) {
-  if (!result.token) {
-    return chrome.runtime.sendMessage({ type: 'getToken' });
-  }
+    if (!result.token) {
+      return chrome.runtime.sendMessage({ type: 'getToken' });
+    }
 
-  const accessToken = result.token;
+    const accessToken = result.token;
 
-  const data = {
-    jobTitle: jobTitleInput.value,
-    urlText: jobPostUrlInput.value,
-    logo: logo ? logo.src : null,
-    companyTitle: companyInput.value,
-    companyUrl: company.info ? company.info.companyUrl : null,
-  };
+    const data = {
+      jobTitle: jobTitleInput.value,
+      urlText: jobPostUrlInput.value,
+      logo: logo ? logo.src : null,
+      companyTitle: companyInput.value,
+      companyUrl: company ? company.info.companyUrl : null,
+      description: jobDescriptionInput.value,
+      location: locationInput.value
+    };
 
-  fetch('https://staging-save-this-job.herokuapp.com/users/addJob', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify(data),
-  })
-    .then((response) => {
-      return response.json();
+    fetch('https://staging-save-this-job.herokuapp.com/users/addJob', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(data),
     })
-    .then((data) => {
-      if (data === 'Jwt is expired') {
-        return chrome.runtime.sendMessage({ type: 'getToken' });
-      }
-      if (data.message === 'Job Post Created') {
-        return chrome.runtime.sendMessage({ type: 'jobSaveSuccess' });
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-      chrome.runtime.sendMessage({ type: 'Error' });
-    });
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        if (data === 'Jwt is expired') {
+          addJob.innerHTML = 'Add'
+          return chrome.runtime.sendMessage({ type: 'getToken' });
+        }
+        if (data.message === 'Job Post Created') {
+          addJob.innerHTML = 'Add'
+          return chrome.runtime.sendMessage({ type: 'jobSaveSuccess' });
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        addJob.innerHTML = 'Add'
+        chrome.runtime.sendMessage({ type: 'Error' });
+      });
   });
 })
 
-chrome.runtime.onMessage.addListener(request => {
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'sendUrl') {
-    chrome.storage.sync.set({ url: request.url }, () => {
-      console.log('url', request.url)
-      console.log("not here")
-    })
+    chrome.storage.sync.set({ url: request.url })
   }
 
   if (request.type === 'getTokenFromStorage') {
@@ -302,7 +313,15 @@ chrome.runtime.onMessage.addListener(request => {
       return setToken();
     }
   }
+
+  if (request.from === 'monster') {
+    document.querySelector(".open-button").addEventListener("click", (event) => {
+      event.preventDefault()
+      companyInput.value = request.companyName
+    })
+  }
 })
+chrome.runtime.sendMessage({ from: "popup" });
 
 const setToken = () => {
   const token = localStorage.getItem('token');
@@ -310,4 +329,6 @@ const setToken = () => {
     chrome.runtime.sendMessage({ type: 'tokenSet' });
   });
 };
+
+
 

@@ -81,7 +81,6 @@ chrome.runtime.onInstalled.addListener(function () {
       });
     }
   });
-
 })
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
@@ -121,8 +120,8 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     }
   }
 });
-
-chrome.runtime.onMessage.addListener((request) => {
+let tabId
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'getToken') {
     return login();
   }
@@ -155,6 +154,17 @@ chrome.runtime.onMessage.addListener((request) => {
       });
     });
   }
+
+  if (request.from === "popup") {
+    tabId = sender.tab.id;
+  }
+  if (request.from === "monster") {
+    console.log('message received')
+    chrome.tabs.query({active: true, currentWindow: true}, function() {
+      chrome.tabs.sendMessage(tabId, {message: 'sent'});
+    });
+  }
+  chrome.tabs.sendMessage(tabId, request)
 });
 
 function login() {
@@ -191,3 +201,4 @@ function signOut() {
     });
   });
 }
+
