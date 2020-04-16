@@ -6,14 +6,14 @@
   "content_scripts": [
     {
       "js": [
-        "popup.js",
-        "monsterScript.js"
+        "indeedScript.js",
+        "monsterScript.js",
+        "popup.js"
       ],
       "matches": ["<all_urls>"],
       "css": [
         "index.css"
-      ],
-      "run_at": "document_end"
+      ]
     }
   ],
   "background": {
