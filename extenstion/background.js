@@ -70,6 +70,15 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       });
     }
 
+    // if (info.menuItemId === 'show') {
+    //   chrome.tabs.query({ currentWindow: true, active: true }, function (
+    //     tabs,
+    //   ) {
+    //     const tabId = tabs[0].id;
+    //     chrome.tabs.sendMessage(tabId, { type: 'show' });
+    //   });
+    // }
+
     if (info.menuItemId === 'logout') {
       chrome.storage.local.get('token', (result) => {
         if (result.token) {
