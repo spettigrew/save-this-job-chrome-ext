@@ -1,4 +1,17 @@
 chrome.runtime.onInstalled.addListener(function () {
+    chrome.contextMenus.create({
+      id: 'show',
+      title: 'Show',
+      contexts: ['all'],
+      visible: false,
+    });
+
+    chrome.contextMenus.create({
+      id: 'hide',
+      title: 'Hide',
+      contexts: ['all'],
+      visible: true,
+    });
 
   chrome.storage.local.get('token', (result) => {
     if (result.token) {
@@ -47,6 +60,15 @@ chrome.runtime.onInstalled.addListener(function () {
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   // This is where we add a event listener for when a user clicks on our context menu items we created above and sends a message to the current tab with the url and title
   if (tab) {
+
+    if (info.menuItemId === 'hide') {
+      chrome.tabs.query({ currentWindow: true, active: true }, function (
+        tabs,
+      ) {
+        const tabId = tabs[0].id;
+        chrome.tabs.sendMessage(tabId, { type: 'hide' });
+      });
+    }
 
     if (info.menuItemId === 'logout') {
       chrome.storage.local.get('token', (result) => {
