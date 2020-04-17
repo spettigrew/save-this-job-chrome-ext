@@ -188,25 +188,22 @@ window.addEventListener("load", () => {
 
       const company =
         document.querySelector('#JobViewHeader h1.title') || null
-        const splitBefore = company.textContent.indexOf('at ')
+      const splitBefore = company.textContent.indexOf('at ')
 
       const jobLocation =
         document.querySelector('#JobViewHeader h2.subtitle') || null
 
 
       const description =
-      document.querySelector('#TrackingJobBody .job_des') || 
-      document.querySelector('#JobDescription') || null
+        document.querySelector('#TrackingJobBody .job_des') ||
+        document.querySelector('#JobDescription') || null
 
-       
+      jobPostUrlInput.value = window.location.href
+      jobTitleInput.value = company ? company.textContent.slice(0, splitBefore) : null
+      companyInput.value = title ? title.textContent.slice(splitAfter + 3) : null
+      locationInput.value = jobLocation ? jobLocation.textContent : 'Remote'
+      jobDescriptionInput.value = description ? description.innerText : null
 
-      chrome.storage.sync.get('url', function (result) {
-        jobPostUrlInput.value = result.url
-        jobTitleInput.value = company ? company.textContent.slice(0, splitBefore) : null
-        companyInput.value = title ? title.textContent.slice(splitAfter + 3) : null
-        locationInput.value = jobLocation ? jobLocation.textContent : 'Remote'
-        jobDescriptionInput.value = description ? description.innerText : null 
-      });
       container.style.display = "block";
     })
 
@@ -220,13 +217,13 @@ window.addEventListener("load", () => {
       event.preventDefault()
       addJob.innerHTML = 'Loading...'
       const logo =
-        document.querySelector('#JobViewHeader .mux-company-logo img') || 
+        document.querySelector('#JobViewHeader .mux-company-logo img') ||
         null;
-        console.log(logo)
+      console.log(logo)
       const companyUrl =
-      document.querySelector('#AboutCompanyProfileLink') ||
+        document.querySelector('#AboutCompanyProfileLink') ||
         null;
-    
+
       chrome.storage.local.get('token', function (result) {
         if (!result.token) {
           return chrome.runtime.sendMessage({ type: 'getToken' });
@@ -274,10 +271,6 @@ window.addEventListener("load", () => {
     })
 
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-      if (request.type === 'sendUrl') {
-        chrome.storage.sync.set({ url: request.url })
-      }
-    
       if (request.type === 'getTokenFromStorage') {
         if (
           window.location.href ===

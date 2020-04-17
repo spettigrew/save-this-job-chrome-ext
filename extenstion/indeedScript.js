@@ -21,7 +21,7 @@ window.addEventListener("load", () => {
       const openButton = document.createElement('img')
       const submitButton = document.createElement('button')
       const closeButton = document.createElement('button')
-  
+
       shadow.setAttribute('id', 'shadowBox')
       container.classList.add('form-popup')
       container.setAttribute('id', 'myForm')
@@ -33,7 +33,7 @@ window.addEventListener("load", () => {
       closeButton.classList.add('cancel')
       formTitle.setAttribute('id', 'formLogo')
       formLogo.src = chrome.runtime.getURL('./images/logo.png')
-  
+
       companyLabel.setAttribute('for', 'company')
       companyInput.setAttribute('type', 'text')
       companyInput.setAttribute('placeholder', 'Company')
@@ -62,7 +62,7 @@ window.addEventListener("load", () => {
       jobPostUrlLabel.textContent = 'Job Post Url'
       locationLabel.textContent = 'Location'
       jobDescription.textContent = 'Description'
-  
+
       form.appendChild(formTitle)
       formTitle.appendChild(formLogo)
       form.appendChild(companyLabel)
@@ -78,10 +78,10 @@ window.addEventListener("load", () => {
       form.appendChild(submitButton)
       form.appendChild(closeButton)
       container.appendChild(form)
-  
+
       window.document.body.appendChild(openButton)
       window.document.body.appendChild(container)
-  
+
       const shadowRoot = container.attachShadow({ mode: 'open' });
       const formStyle = document.createElement('style')
       formStyle.textContent = `
@@ -180,7 +180,7 @@ window.addEventListener("load", () => {
       `
       shadowRoot.appendChild(formStyle)
       shadowRoot.appendChild(form)
-  
+
       const setCompanyName = (company) => {
         if (company) {
           company.info = { company: company.textContent, companyUrl: company.href || null };
@@ -188,7 +188,7 @@ window.addEventListener("load", () => {
           return null
         }
       };
-  
+
       document.querySelector(".open-button").addEventListener("click", (event) => {
         event.preventDefault()
         const title =
@@ -209,29 +209,27 @@ window.addEventListener("load", () => {
           document.querySelectorAll(".icl-u-xs-mt--xs")[1] ||
           document.querySelector('.Location') ||
           null
-  
+
         const description =
           document.querySelector('#vjs-desc') ||
           document.querySelector('#jobDescriptionText') ||
           document.querySelector('.JobContent') ||
           null
-  
-        chrome.storage.sync.get('url', function (result) {
-          jobPostUrlInput.value = result.url ? result.url : null
-          jobTitleInput.value = title ? title.textContent : null
-          companyInput.value = company ? company.info.company : null
-          locationInput.value = jobLocation ? jobLocation.lastChild.textContent : null
-          jobDescriptionInput.value = description ? description.innerText : null
-        });
+
+        jobPostUrlInput.value = window.location.href
+        jobTitleInput.value = title ? title.textContent : null
+        companyInput.value = company ? company.info.company : null
+        locationInput.value = jobLocation ? jobLocation.lastChild.textContent : null
+        jobDescriptionInput.value = description ? description.innerText : null
         container.style.display = "block";
       })
-  
+
       shadowRoot.querySelector(".cancel").addEventListener("click", (event) => {
         event.preventDefault()
         container.style.display = "none";
       })
-  
-  
+
+
       const addJob = shadowRoot.querySelector('#saveJob')
       addJob.addEventListener("click", (event) => {
         event.preventDefault()
@@ -249,14 +247,14 @@ window.addEventListener("load", () => {
           document.querySelector('.CompanyName') ||
           null;
         setCompanyName(company);
-  
+
         chrome.storage.local.get('token', function (result) {
           if (!result.token) {
             return chrome.runtime.sendMessage({ type: 'getToken' });
           }
-  
+
           const accessToken = result.token;
-  
+
           const data = {
             jobTitle: jobTitleInput.value,
             urlText: jobPostUrlInput.value,
@@ -266,7 +264,7 @@ window.addEventListener("load", () => {
             description: jobDescriptionInput.value,
             location: locationInput.value
           };
-  
+
           fetch('https://staging-save-this-job.herokuapp.com/users/addJob', {
             method: 'POST',
             headers: {
@@ -295,12 +293,9 @@ window.addEventListener("load", () => {
             });
         });
       })
-  
+
       chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-        if (request.type === 'sendUrl') {
-          chrome.storage.sync.set({ url: request.url })
-        }
-  
+      
         if (request.type === 'getTokenFromStorage') {
           if (
             window.location.href ===
@@ -309,11 +304,9 @@ window.addEventListener("load", () => {
             return setToken();
           }
         }
-  
-        
       })
-    
-  
+
+
       const setToken = () => {
         const token = localStorage.getItem('token');
         chrome.storage.local.set({ token }, () => {
@@ -322,6 +315,6 @@ window.addEventListener("load", () => {
       };
     }
   }
-  
+
 
 })
