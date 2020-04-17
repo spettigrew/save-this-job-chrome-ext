@@ -189,17 +189,38 @@ window.addEventListener("load", () => {
   shadowRoot.appendChild(formStyle)
   shadowRoot.appendChild(openButton)
   shadowRoot.appendChild(container)
- 
 
+  // function getSelectedText() {
+  //   var selectedText = '';
 
+  //   // window.getSelection 
+  //   if (window.getSelection) {
+  //     selectedText = window.getSelection();
+  //   }
+  //   // document.getSelection 
+  //   else if (document.getSelection) {
+  //     selectedText = document.getSelection();
+  //   }
+  //   // document.selection 
+  //   else if (document.selection) {
+  //     selectedText =
+  //       document.selection.createRange().text;
+  //   } else return;
+  //   // To write the selected text into the textarea 
+  //   // document.testform.selectedtext.value = selectedText;
+  //   console.log(selectedText)
+  // }
+
+  // window.document.body.addEventListener('click', (event) => {
+  //   getSelectedText()
+  // })
 
   shadowRoot.querySelector(".open-button").addEventListener("click", (event) => {
     event.preventDefault()
-
-    chrome.storage.sync.get('url', function (result) {
-      jobPostUrlInput.value = result.url ? result.url : null
-    });
+    
+    jobPostUrlInput.value = window.location.href
     container.style.display = "block";
+    
   })
 
   shadowRoot.querySelector(".cancel").addEventListener("click", (event) => {

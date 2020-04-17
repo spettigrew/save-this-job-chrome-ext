@@ -1,44 +1,5 @@
 chrome.runtime.onInstalled.addListener(function () {
-  chrome.tabs.onHighlighted.addListener(function () {
-    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-      const tabUrl = tabs[0].url;
-      chrome.tabs.sendMessage(tabs[0].id, {
-        type: "sendUrl",
-        url: tabUrl
-      })
-    })
-  })
 
-  chrome.tabs.onCreated.addListener(function () {
-    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-      const tabUrl = tabs[0].url;
-      chrome.tabs.sendMessage(tabs[0].id, {
-        type: "sendUrl",
-        url: tabUrl
-      })
-    })
-  })
-
-  chrome.tabs.onUpdated.addListener(function () {
-    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-      const tabUrl = tabs[0].url;
-      chrome.tabs.sendMessage(tabs[0].id, {
-        type: "sendUrl",
-        url: tabUrl
-      })
-    })
-  })
-
-  chrome.tabs.onActivated.addListener(function () {
-    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-      const tabUrl = tabs[0].url;
-      chrome.tabs.sendMessage(tabs[0].id, {
-        type: "sendUrl",
-        url: tabUrl
-      })
-    })
-  })
-  
   chrome.storage.local.get('token', (result) => {
     if (result.token) {
       chrome.contextMenus.create({
