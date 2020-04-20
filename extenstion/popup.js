@@ -1,6 +1,7 @@
 window.addEventListener("load", () => {
 
   const shadow = document.createElement('div')
+  const popup = document.createElement('div')
   const container = document.createElement('div')
   const form = document.createElement('form')
   const formTitle = document.createElement('div')
@@ -17,31 +18,35 @@ window.addEventListener("load", () => {
   const jobDescriptionInput = document.createElement('textarea')
   const openButton = document.createElement('img')
   const submitButton = document.createElement('button')
-  const closeButton = document.createElement('button')
 
   shadow.setAttribute('id', 'shadowBox')
+  popup.setAttribute('id', 'popup')
+  popup.classList.add('formSuccess')
+  popup.setAttribute('style', 'display: none !important')
   container.classList.add('form-popup')
   container.setAttribute('id', 'myForm')
   form.classList.add('form-container')
   openButton.classList.add('open-button')
   submitButton.classList.add('btn')
   submitButton.setAttribute('id', 'saveJob')
-  closeButton.classList.add('btn')
-  closeButton.classList.add('cancel')
   formTitle.setAttribute('id', 'formLogo')
   formLogo.src = chrome.runtime.getURL('./images/logo.png')
+  companyInput.classList.add('input')
+  jobTitleInput.classList.add('input')
+  locationInput.classList.add('input')
+  jobDescriptionInput.classList.add('input')
 
   companyLabel.setAttribute('for', 'company')
   companyInput.setAttribute('type', 'text')
-  companyInput.setAttribute('placeholder', 'Company')
+  companyInput.setAttribute('placeholder', 'Highlight or type Company Name')
   companyInput.setAttribute('name', 'company')
   jobTitleLabel.setAttribute('for', 'jobTitle')
   jobTitleInput.setAttribute('type', 'text')
-  jobTitleInput.setAttribute('placeholder', 'Job Title')
+  jobTitleInput.setAttribute('placeholder', 'Highlight or type Job Title')
   jobTitleInput.setAttribute('name', 'jobTitle')
   locationLabel.setAttribute('for', 'location')
   locationInput.setAttribute('type', 'text')
-  locationInput.setAttribute('placeholder', 'Location')
+  locationInput.setAttribute('placeholder', 'Highlight or type Location')
   locationInput.setAttribute('name', 'location')
   jobPostUrlLabel.setAttribute('for', 'postUrl')
   jobPostUrlInput.setAttribute('type', 'text')
@@ -49,16 +54,20 @@ window.addEventListener("load", () => {
   jobPostUrlInput.setAttribute('name', 'postUrl')
   jobDescription.setAttribute('for', 'description')
   jobDescriptionInput.setAttribute('type', 'textarea')
-  jobDescriptionInput.setAttribute('placeholder', 'Description')
+  jobDescriptionInput.setAttribute('placeholder', 'Highlight or type Description')
   jobDescriptionInput.setAttribute('name', 'description')
   submitButton.textContent = 'Add'
-  closeButton.textContent = 'Close'
   openButton.src = chrome.extension.getURL("./images/icon48.png")
   companyLabel.textContent = 'Company'
   jobTitleLabel.textContent = 'Job Title'
   jobPostUrlLabel.textContent = 'Job Post Url'
   locationLabel.textContent = 'Location'
   jobDescription.textContent = 'Description'
+  popup.innerHTML = `
+      <p style="color: #08A6C9; margin: 0px; font-size: 16px; font-family: lato; font-weight: 400; letter-spacing: 0px; line-height: 23px;">Your job was saved to<p>
+      <p style="color: #08A6C9; margin: 10px 0px 30px; font-size: 35px; font-family: lato; font-weight: 600; letter-spacing: 0px; line-height: 42px; text-transform: capitalize;">SaveThisJob</p>
+      <a href="https://staging.d3d1q8nq7a3fmz.amplifyapp.com/dashboard" target="_blank" style="box-sizing: border-box; line-height: 15px; text-decoration: none; display: inline-block; padding: 10px 20px; color: white; font-weight: 600; border-radius: 4px; transition: all 0.4s ease-out 0s; background-color: #08A6C9; text-align: center; font-size: 14px; border: 1px solid rgba(0, 0, 0, 0); position: relative; box-shadow: rgba(25, 4, 69, 0.05) 0px 4px 10px;">View Dashboard</a>
+      `
 
   form.appendChild(formTitle)
   formTitle.appendChild(formLogo)
@@ -73,10 +82,10 @@ window.addEventListener("load", () => {
   form.appendChild(jobDescription)
   form.appendChild(jobDescriptionInput)
   form.appendChild(submitButton)
-  form.appendChild(closeButton)
   container.appendChild(form)
   shadow.appendChild(container)
   shadow.appendChild(openButton)
+  container.appendChild(popup)
 
   window.document.body.appendChild(shadow)
 
@@ -185,51 +194,80 @@ window.addEventListener("load", () => {
         font-size: 12px !important;
         font-weight: bold;
       }
+
+      .formSuccess {
+        display: flex;
+        flex-direction: column;
+        height: 250px;
+        align-items: center;
+        justify-content: center;
+        padding: 5px;
+        background-color: #f1f1f1;
+        z-index: 9999999999999999
+        content: 'Success'
+      }
       `
   shadowRoot.appendChild(formStyle)
   shadowRoot.appendChild(openButton)
   shadowRoot.appendChild(container)
 
-  // function getSelectedText() {
-  //   var selectedText = '';
+  function togglePopup() {
+    const element = shadowRoot.querySelector("#myForm");
+    const success = shadowRoot.querySelector('#popup')
+    if (element.style.display !== "block") {
+      openButton.src = chrome.extension.getURL("./images/close-window-50.png")
+      if (success.style.display === "flex") {
+        success.setAttribute('style', 'display: none !important')
+        form.style.display = "block";
+        openButton.src = chrome.extension.getURL("./images/close-window-50.png")
+      } else {
+        null
+      }
+      const inputs = shadowRoot.querySelectorAll('.input')
 
-  //   // window.getSelection 
-  //   if (window.getSelection) {
-  //     selectedText = window.getSelection();
-  //   }
-  //   // document.getSelection 
-  //   else if (document.getSelection) {
-  //     selectedText = document.getSelection();
-  //   }
-  //   // document.selection 
-  //   else if (document.selection) {
-  //     selectedText =
-  //       document.selection.createRange().text;
-  //   } else return;
-  //   // To write the selected text into the textarea 
-  //   // document.testform.selectedtext.value = selectedText;
-  //   console.log(selectedText)
-  // }
+      function onCompanyInputMouseUp() {
+        const selection = window.getSelection().toString()
+        companyInput.value = companyInput.value ? companyInput.value : selection
+      }
 
-  // window.document.body.addEventListener('click', (event) => {
-  //   getSelectedText()
-  // })
+      function onJobTitleInputMouseUp() {
+        const selection = window.getSelection().toString()
+        jobTitleInput.value = jobTitleInput.value ? jobTitleInput.value : selection
+      }
 
-  shadowRoot.querySelector(".open-button").addEventListener("click", (event) => {
-    event.preventDefault()
-    
-    jobPostUrlInput.value = window.location.href
-    container.style.display = "block";
-    
-  })
+      function onLocationInputMouseUp() {
+        const selection = window.getSelection().toString()
+        locationInput.value = locationInput.value ? locationInput.value : selection
+      }
 
-  shadowRoot.querySelector(".cancel").addEventListener("click", (event) => {
-    event.preventDefault()
-    container.style.display = "none";
+      function onDescriptionInputMouseUp() {
+        const selection = window.getSelection().toString()
+        jobDescriptionInput.value = jobDescriptionInput.value ? jobDescriptionInput.value : selection
+      }
+
+      inputs[0].addEventListener('focus', onCompanyInputMouseUp, false);
+      inputs[1].addEventListener('focus', onJobTitleInputMouseUp, false);
+      inputs[2].addEventListener('focus', onLocationInputMouseUp, false);
+      inputs[3].addEventListener('focus', onDescriptionInputMouseUp, false);
+
+      jobPostUrlInput.value = window.location.href
+      container.style.display = "block";
+      form.style.display = "block";
+      element.style.display = "block";
+    } else {
+      element.style.display = "none";
+      openButton.src = chrome.extension.getURL("./images/icon48.png")
+    }
+  }
+
+
+  shadowRoot.querySelector(".open-button").addEventListener("click", () => {
+    togglePopup()
   })
 
 
   const addJob = shadowRoot.querySelector('#saveJob')
+
   addJob.addEventListener("click", (event) => {
     event.preventDefault()
     addJob.innerHTML = 'Loading...'
@@ -268,6 +306,8 @@ window.addEventListener("load", () => {
             return chrome.runtime.sendMessage({ type: 'getToken' });
           }
           if (data.message === 'Job Post Created') {
+            form.style.display = 'none'
+            popup.style.display = 'flex'
             jobPostUrlInput.value = ""
             jobTitleInput.value = ""
             companyInput.value = ""
