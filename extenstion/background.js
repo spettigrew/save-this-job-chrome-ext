@@ -66,18 +66,26 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         tabs,
       ) {
         const tabId = tabs[0].id;
-        chrome.tabs.sendMessage(tabId, { type: 'hide' });
+        chrome.tabs.sendMessage(tabId, { type: 'hide' }, () => {
+          chrome.contextMenus.update('hide', { visible: false }, () => {
+            chrome.contextMenus.update('show', { visible: true })
+          })
+        });
       });
     }
 
-    // if (info.menuItemId === 'show') {
-    //   chrome.tabs.query({ currentWindow: true, active: true }, function (
-    //     tabs,
-    //   ) {
-    //     const tabId = tabs[0].id;
-    //     chrome.tabs.sendMessage(tabId, { type: 'show' });
-    //   });
-    // }
+    if (info.menuItemId === 'show') {
+      chrome.tabs.query({ currentWindow: true, active: true }, function (
+        tabs,
+      ) {
+        const tabId = tabs[0].id;
+        chrome.tabs.sendMessage(tabId, { type: 'show' }, () => {
+          chrome.contextMenus.update('show', { visible: false }, () => {
+            chrome.contextMenus.update('hide', { visible: true })
+          })
+        });
+      });
+    }
 
     if (info.menuItemId === 'logout') {
       chrome.storage.local.get('token', (result) => {
