@@ -336,6 +336,18 @@ window.addEventListener("load", () => {
 
       chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
+        if (request.type === 'hide') {
+          const tack = 
+          document.querySelector('.open-button')
+          tack.setAttribute('style', 'display: none !important')
+        }
+       
+          if (request.type === 'show') {
+            const tack =
+              document.querySelector('.open-button')
+            tack.setAttribute('style', 'display')
+          }
+      
         if (request.type === 'getTokenFromStorage') {
           if (
             window.location.href ===
