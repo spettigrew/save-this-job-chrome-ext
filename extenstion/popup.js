@@ -314,6 +314,8 @@ window.addEventListener("load", () => {
             jobDescriptionInput.value = ""
             addJob.innerHTML = 'Add'
             return chrome.runtime.sendMessage({ type: 'jobSaveSuccess' });
+          } else {
+            return addJob.innerHTML = 'Add'
           }
         })
         .catch((error) => {
@@ -323,38 +325,45 @@ window.addEventListener("load", () => {
         });
     });
   })
-
-  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.type === 'hide') {
-      const tack =
-        shadowRoot.querySelector('.open-button')
-      tack.setAttribute('style', 'display: none !important')
-    }
-
-    if (request.type === 'show') {
-      const tack =
-        shadowRoot.querySelector('.open-button')
-      tack.setAttribute('style', 'display')
-    }
-
-    if (request.type === 'getTokenFromStorage') {
-      if (
-        window.location.href ===
-        'https://staging.d3d1q8nq7a3fmz.amplifyapp.com/dashboard'
-      ) {
-        return setToken();
-      }
-    }
-  })
-
-  const setToken = () => {
-    const token = localStorage.getItem('token');
-    chrome.storage.local.set({ token }, () => {
-      chrome.runtime.sendMessage({ type: 'tokenSet' });
-    });
-  };
-
-  
-
 })
+
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.type === 'hide') {
+    setElement(shadowRoot)
+  }
+
+  if (request.type === 'show') {
+    removeElement(shadowRoot)
+  }
+
+  if (request.type === 'getTokenFromStorage') {
+    if (
+      window.location.href ===
+      'https://staging.d3d1q8nq7a3fmz.amplifyapp.com/dashboard'
+    ) {
+      return setToken();
+    }
+  }
+})
+
+const setElement = (root) => {
+  const tack =
+    root.querySelector('.open-button')
+  tack.setAttribute('style', 'display: none !important')
+}
+
+const removeElement = (root) => {
+  const tack =
+    root.querySelector('.open-button')
+  tack.setAttribute('style', 'display')
+}
+
+const setToken = () => {
+  const token = localStorage.getItem('token');
+  chrome.storage.local.set({ token }, () => {
+    chrome.runtime.sendMessage({ type: 'tokenSet' });
+  });
+};
+
 
