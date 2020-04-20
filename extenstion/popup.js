@@ -90,7 +90,7 @@ window.addEventListener("load", () => {
   window.document.body.appendChild(shadow)
 
 
-  const autoFills = ['https://www.monster.com', 'https://www.indeed.com', 'https://gigs.indeed.com']
+  const autoFills = ['https://www.monster.com', 'https://www.indeed.com', 'https://gigs.indeed.com', 'https://staging.d3d1q8nq7a3fmz.amplifyapp.com', 'https://savethisjob.com']
 
   for (let i = 0; i < autoFills.length; i++) {
     if (window.location.origin === autoFills[i]) {
@@ -120,7 +120,7 @@ window.addEventListener("load", () => {
         bottom: 23px;
         right: 28px;
         display: block !important;
-        z-index: 985696587451232547;
+        z-index: 9856965874512325479999999999999999;
         /* width: 280px; */
       }
       
@@ -260,13 +260,12 @@ window.addEventListener("load", () => {
     }
   }
 
+  const addJob = shadowRoot.querySelector('#saveJob')
+  const thumbtack = shadowRoot.querySelector('.open-button');
 
-  shadowRoot.querySelector(".open-button").addEventListener("click", () => {
+  thumbtack.addEventListener("click", () => {
     togglePopup()
   })
-
-
-  const addJob = shadowRoot.querySelector('#saveJob')
 
   addJob.addEventListener("click", (event) => {
     event.preventDefault()
@@ -324,26 +323,38 @@ window.addEventListener("load", () => {
         });
     });
   })
-})
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.type === 'sendUrl') {
-    chrome.storage.sync.set({ url: request.url })
-  }
-
-  if (request.type === 'getTokenFromStorage') {
-    if (
-      window.location.href ===
-      'https://staging.d3d1q8nq7a3fmz.amplifyapp.com/dashboard'
-    ) {
-      return setToken();
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.type === 'hide') {
+      const tack =
+        shadowRoot.querySelector('.open-button')
+      tack.setAttribute('style', 'display: none !important')
     }
-  }
+
+    if (request.type === 'show') {
+      const tack =
+        shadowRoot.querySelector('.open-button')
+      tack.setAttribute('style', 'display')
+    }
+
+    if (request.type === 'getTokenFromStorage') {
+      if (
+        window.location.href ===
+        'https://staging.d3d1q8nq7a3fmz.amplifyapp.com/dashboard'
+      ) {
+        return setToken();
+      }
+    }
+  })
+
+  const setToken = () => {
+    const token = localStorage.getItem('token');
+    chrome.storage.local.set({ token }, () => {
+      chrome.runtime.sendMessage({ type: 'tokenSet' });
+    });
+  };
+
+  
+
 })
 
-const setToken = () => {
-  const token = localStorage.getItem('token');
-  chrome.storage.local.set({ token }, () => {
-    chrome.runtime.sendMessage({ type: 'tokenSet' });
-  });
-};

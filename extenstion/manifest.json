@@ -1,8 +1,8 @@
 {
   "name": "Save This Job",
   "manifest_version": 2,
-  "version": "0.0.16",
-  "description": "A Chrome extension that allows users to save job posts from indeed.com.",
+  "version": "0.2.0",
+  "description": "Chrome extension that allows users to save job posts from any job board.",
   "content_scripts": [
     {
       "js": [

@@ -198,12 +198,35 @@ window.addEventListener("load", () => {
 
     function togglePopup() {
       const title = document.querySelector('#JobViewHeader h1.title') || null
-      const splitAfter = title.textContent.indexOf('at ')
+      const setTitle = () => {
+        const splitAfter = title.textContent.indexOf('at ')
+        const splitAfterFrom = title.textContent.indexOf('from ')
 
+        if (title) {
+          if (title.textContent.includes(' at ')) {
+            return title.textContent.slice(splitAfter + 3)
+          }
+          if (title.textContent.includes(' from ')) {
+            return title.textContent.slice(splitAfterFrom + 5)
+          }
+        }
+      }
 
       const company =
         document.querySelector('#JobViewHeader h1.title') || null
-      const splitBefore = company.textContent.indexOf('at ')
+        const setCompanyName = () => {
+          const splitBefore = company.textContent.indexOf('at ')
+          const splitBeforeFrom = company.textContent.indexOf('from ')
+
+          if (company) {
+            if(company.textContent.includes(' at ')) {
+              return company.textContent.slice(0, splitBefore)
+            }
+            if (company.textContent.includes(' from ')) {
+              return company.textContent.slice(0, splitBeforeFrom)
+            }
+          }
+        }
 
       const jobLocation =
         document.querySelector('#JobViewHeader h2.subtitle') || null
@@ -225,8 +248,8 @@ window.addEventListener("load", () => {
           null
         }
         jobPostUrlInput.value = window.location.href
-        jobTitleInput.value = company ? company.textContent.slice(0, splitBefore) : null
-        companyInput.value = title ? title.textContent.slice(splitAfter + 3) : null
+        jobTitleInput.value = company ? setCompanyName() : null
+        companyInput.value = title ? setTitle() : null
         locationInput.value = jobLocation ? jobLocation.textContent : 'Remote'
         jobDescriptionInput.value = description ? description.innerText : null
 
@@ -238,6 +261,8 @@ window.addEventListener("load", () => {
         openButton.src = chrome.extension.getURL("./images/icon48.png")
       }
     }
+
+
 
     document.querySelector(".open-button").addEventListener("click", () => {
       togglePopup()
@@ -309,6 +334,18 @@ window.addEventListener("load", () => {
     })
 
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if (request.type === 'hide') {
+        const tack =
+          document.querySelector('.open-button')
+        tack.setAttribute('style', 'display: none !important')
+      }
+
+      if (request.type === 'show') {
+        const tack =
+          document.querySelector('.open-button')
+        tack.setAttribute('style', 'display')
+      }
+
       if (request.type === 'getTokenFromStorage') {
         if (
           window.location.href ===
