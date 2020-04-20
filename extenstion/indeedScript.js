@@ -300,13 +300,12 @@ window.addEventListener("load", () => {
           document.querySelector('.open-button')
           tack.setAttribute('style', 'display: none !important')
         }
-
-        // chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-        //   if (request.type === 'show') {
-        //     const tack =
-        //       document.querySelector('.open-button')
-        //     tack.setAttribute('style', 'display')
-        //   }
+       
+          if (request.type === 'show') {
+            const tack =
+              document.querySelector('.open-button')
+            tack.setAttribute('style', 'display')
+          }
       
         if (request.type === 'getTokenFromStorage') {
           if (
