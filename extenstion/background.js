@@ -150,7 +150,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'tokenSet') {
     chrome.contextMenus.update('logout', { visible: true }, function () {
       chrome.contextMenus.update('login', { visible: false }, function () {
-        chrome.contextMenus.update('ViewDashboard', { visible: true });
+        chrome.contextMenus.update('ViewDashboard', { visible: true }, function() {
+          setTimeout(() => {
+            chrome.contextMenus.update('logout', {visible: false }, function () {
+              chrome.contextMenus.update('login', {visible: true }, function () {
+                chrome.contextMenus.update('ViewDashboard', {visible: false });
+              })
+            })
+          }, 3000000)
+        } );
       });
     });
   }
