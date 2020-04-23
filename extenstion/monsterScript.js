@@ -28,6 +28,7 @@ window.addEventListener("load", () => {
     container.setAttribute('id', 'myForm')
     form.classList.add('form-container')
     openButton.classList.add('open-button')
+    openButton.setAttribute('style', 'display: none !important')
     submitButton.classList.add('btn')
     submitButton.setAttribute('id', 'saveJob')
     formTitle.setAttribute('id', 'formLogo')
@@ -105,7 +106,7 @@ window.addEventListener("load", () => {
       position: fixed;
       bottom: 23px;
       right: 28px;
-      display: block !important;
+      display: none !important;
       z-index: 985696587451232547;
       /* width: 280px; */
     }
@@ -197,6 +198,7 @@ window.addEventListener("load", () => {
     shadowRoot.appendChild(popup)
 
     function togglePopup() {
+      console.log('from the monsterScript')
       const title = document.querySelector('#JobViewHeader h1.title') || null
       const setTitle = () => {
         const splitAfter = title.textContent.indexOf('at ')
@@ -335,17 +337,63 @@ window.addEventListener("load", () => {
 
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (request.type === 'hide') {
-        const tack =
-          document.querySelector('.open-button')
-        tack.setAttribute('style', 'display: none !important')
+        chrome.storage.local.get('token', (storage) => {
+          if (storage.token) {
+            const tack =
+              document.querySelector('.open-button')
+            tack.setAttribute('style', 'display: block !important')
+            console.log('show')
+            return tack
+          } else {
+            chrome.storage.local.get('token', () => {
+              const tack =
+                document.querySelector('.open-button')
+              tack.setAttribute('style', 'display: none !important')
+              console.log('hide')
+              return tack
+            })
+          }
+        })
       }
-
+    
       if (request.type === 'show') {
-        const tack =
-          document.querySelector('.open-button')
-        tack.setAttribute('style', 'display')
+        chrome.storage.local.get('token', (storage) => {
+          if (storage.token) {
+            const tack =
+              document.querySelector('.open-button')
+            tack.setAttribute('style', 'display: block !important')
+            console.log('show')
+            return tack
+          } else {
+            chrome.storage.local.get('token', () => {
+              const tack =
+                document.querySelector('.open-button')
+              tack.setAttribute('style', 'display: none !important')
+              console.log('hide')
+              return tack
+            })
+          }
+        })
       }
-
+    
+      if (request.type === 'tabActivated') {
+        chrome.storage.local.get('token', (storage) => {
+          if (storage.token) {
+            const tack =
+              document.querySelector('.open-button')
+            tack.setAttribute('style', 'display: block !important')
+            console.log('show tab')
+            return tack
+          } else {
+            const tack =
+              document.querySelector('.open-button')
+            tack.setAttribute('style', 'display: none !important')
+            console.log('hide')
+            return tack
+          }
+        })
+      }
+    
       if (request.type === 'getTokenFromStorage') {
         if (
           window.location.href ===
@@ -354,6 +402,7 @@ window.addEventListener("load", () => {
           return setToken();
         }
       }
+      
     })
 
     const setToken = () => {
@@ -362,7 +411,7 @@ window.addEventListener("load", () => {
         chrome.runtime.sendMessage({ type: 'tokenSet' });
       });
     };
-
+    
   }
 });
 

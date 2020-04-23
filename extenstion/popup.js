@@ -85,7 +85,6 @@ shadow.appendChild(container)
 shadow.appendChild(openButton)
 container.appendChild(popup)
 
-
 const formStyle = document.createElement('style')
 formStyle.textContent = `
     body {font-family: Arial, Helvetica, sans-serif;}
@@ -195,6 +194,7 @@ formStyle.textContent = `
     `
 
 const shadowRoot = shadow.attachShadow({ mode: 'open' });
+
 window.addEventListener("load", () => {
 
   window.document.body.appendChild(shadow)
@@ -225,7 +225,6 @@ window.addEventListener("load", () => {
   shadowRoot.appendChild(formStyle)
   shadowRoot.appendChild(openButton)
   shadowRoot.appendChild(container)
-
 
 
   function togglePopup() {
@@ -419,9 +418,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 const setToken = () => {
   const token = localStorage.getItem('token');
   chrome.storage.local.set({ token }, () => {
-    chrome.runtime.sendMessage({ type: 'tokenSet' }, () => {
-      chrome.runtime.reload()
-    });
+    chrome.runtime.sendMessage({ type: 'tokenSet' });
   });
 };
 
