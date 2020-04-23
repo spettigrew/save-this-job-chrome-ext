@@ -16,6 +16,11 @@ const jobDescription = document.createElement('label')
 const jobDescriptionInput = document.createElement('textarea')
 const openButton = document.createElement('img')
 const submitButton = document.createElement('button')
+const companyTooltip = document.createElement('div')
+const titleTooltip = document.createElement('div')
+const locationTooltip = document.createElement('div')
+const descriptionTooltip = document.createElement('div')
+
 
 shadow.setAttribute('id', 'shadowBox')
 popup.setAttribute('id', 'popup')
@@ -29,10 +34,18 @@ submitButton.classList.add('btn')
 submitButton.setAttribute('id', 'saveJob')
 formTitle.setAttribute('id', 'formLogo')
 formLogo.src = chrome.runtime.getURL('./images/logo.png')
+companyTooltip.src = chrome.runtime.getURL('./images/info-15.png')
+titleTooltip.src = chrome.runtime.getURL('./images/info-15.png')
+locationTooltip.src = chrome.runtime.getURL('./images/info-15.png')
+descriptionTooltip.src = chrome.runtime.getURL('./images/info-15.png')
 companyInput.classList.add('input')
 jobTitleInput.classList.add('input')
 locationInput.classList.add('input')
 jobDescriptionInput.classList.add('input')
+companyTooltip.classList.add('tooltip')
+titleTooltip.classList.add('tooltip')
+locationTooltip.classList.add('tooltip')
+descriptionTooltip.classList.add('tooltip')
 
 companyLabel.setAttribute('for', 'company')
 companyInput.setAttribute('type', 'text')
@@ -66,18 +79,45 @@ popup.innerHTML = `
       <p style="color: #08A6C9; margin: 10px 0px 30px; font-size: 35px; font-family: lato; font-weight: 600; letter-spacing: 0px; line-height: 42px; text-transform: capitalize;">SaveThisJob</p>
       <a href="https://staging.d3d1q8nq7a3fmz.amplifyapp.com/dashboard" target="_blank" style="box-sizing: border-box; line-height: 15px; text-decoration: none; display: inline-block; padding: 10px 20px; color: white; font-weight: 600; border-radius: 4px; transition: all 0.4s ease-out 0s; background-color: #08A6C9; text-align: center; font-size: 14px; border: 1px solid rgba(0, 0, 0, 0); position: relative; box-shadow: rgba(25, 4, 69, 0.05) 0px 4px 10px;">View Dashboard</a>
       `
-
+companyTooltip.innerHTML = `
+<div class="tooltip">
+  <img src="chrome-extension://ideneijiccfapaeembbhleajekkkhdja/./images/info-15.png" />
+  <span class="tooltiptext">Highlight any text on the page, then click this input field to auto fill company name</span>
+</div>
+`
+titleTooltip.innerHTML = `
+<div class="tooltip">
+  <img src="chrome-extension://ideneijiccfapaeembbhleajekkkhdja/./images/info-15.png" />
+  <span class="tooltiptext">Highlight any text on the page, then click this input field to auto fill job title</span>
+</div>
+`
+locationTooltip.innerHTML = `
+<div class="tooltip">
+  <img src="chrome-extension://ideneijiccfapaeembbhleajekkkhdja/./images/info-15.png" />
+  <span class="tooltiptext">Highlight any text on the page, then click this input field to auto fill location</span>
+</div>
+`
+descriptionTooltip.innerHTML = `
+<div class="tooltip">
+  <img src="chrome-extension://ideneijiccfapaeembbhleajekkkhdja/./images/info-15.png" />
+  <span class="tooltiptext">Highlight any text on the page, then click this input field to auto fill job description</span>
+</div>
+`
 form.appendChild(formTitle)
 formTitle.appendChild(formLogo)
 form.appendChild(companyLabel)
+companyLabel.appendChild(companyTooltip)
 form.appendChild(companyInput)
 form.appendChild(jobTitleLabel)
+jobTitleLabel.appendChild(titleTooltip)
 form.appendChild(jobTitleInput)
 form.appendChild(locationLabel)
+locationLabel.appendChild(locationTooltip)
 form.appendChild(locationInput)
 form.appendChild(jobPostUrlLabel)
 form.appendChild(jobPostUrlInput)
 form.appendChild(jobDescription)
+jobDescription.appendChild(descriptionTooltip)
 form.appendChild(jobDescriptionInput)
 form.appendChild(submitButton)
 container.appendChild(form)
@@ -191,7 +231,36 @@ formStyle.textContent = `
       z-index: 9999999999999999
       content: 'Success'
     }
-    `
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      padding-left: 4px;
+    }
+    
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: #f1f1f1;
+      color: #08A6C9;
+      text-align: center;
+      border-radius: 6px;
+      padding-left: 7px;
+      padding-right: 7px;
+      padding-top: 1px;
+      
+      /* Position the tooltip */
+      position: absolute;
+      z-index: 1;
+      top: -5px;
+      left: 105%;
+    }
+    
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+`
 
 const shadowRoot = shadow.attachShadow({ mode: 'open' });
 
@@ -345,20 +414,31 @@ window.addEventListener("load", () => {
 })
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.type === 'contextShow') {
+    const tack =
+      shadowRoot.querySelector('.open-button')
+    tack.setAttribute('style', 'display: block !important')
+    return tack
+  }
+
+  if (request.type === 'contextHide') {
+    const tack =
+      shadowRoot.querySelector('.open-button')
+    tack.setAttribute('style', 'display: none !important')
+    return tack
+  }
   if (request.type === 'hide') {
     chrome.storage.local.get('token', (storage) => {
       if (storage.token) {
         const tack =
           shadowRoot.querySelector('.open-button')
         tack.setAttribute('style', 'display: block !important')
-        console.log('show')
         return tack
       } else {
         chrome.storage.local.get('token', () => {
           const tack =
             shadowRoot.querySelector('.open-button')
           tack.setAttribute('style', 'display: none !important')
-          console.log('hide')
           return tack
         })
       }
@@ -371,14 +451,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const tack =
           shadowRoot.querySelector('.open-button')
         tack.setAttribute('style', 'display: block !important')
-        console.log('show')
         return tack
       } else {
         chrome.storage.local.get('token', () => {
           const tack =
             shadowRoot.querySelector('.open-button')
           tack.setAttribute('style', 'display: none !important')
-          console.log('hide')
           return tack
         })
       }
@@ -391,13 +469,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const tack =
           shadowRoot.querySelector('.open-button')
         tack.setAttribute('style', 'display: block !important')
-        console.log('show tab')
         return tack
       } else {
         const tack =
           shadowRoot.querySelector('.open-button')
         tack.setAttribute('style', 'display: none !important')
-        console.log('hide')
         return tack
       }
     })
