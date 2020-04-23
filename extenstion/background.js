@@ -1,18 +1,3 @@
-
-chrome.contextMenus.create({
-  id: 'show',
-  title: 'Show',
-  contexts: ['all'],
-  visible: false,
-});
-
-chrome.contextMenus.create({
-  id: 'hide',
-  title: 'Hide',
-  contexts: ['all'],
-  visible: true,
-});
-
 chrome.storage.local.get('token', (result) => {
   if (result.token) {
     chrome.contextMenus.create({
@@ -32,6 +17,18 @@ chrome.storage.local.get('token', (result) => {
       title: 'Login',
       contexts: ['all'],
       visible: false,
+    });
+    chrome.contextMenus.create({
+      id: 'show',
+      title: 'Show',
+      contexts: ['all'],
+      visible: false,
+    });
+    chrome.contextMenus.create({
+      id: 'hide',
+      title: 'Hide',
+      contexts: ['all'],
+      visible: true,
     });
 
   } else {
@@ -53,32 +50,43 @@ chrome.storage.local.get('token', (result) => {
       contexts: ['all'],
       visible: false,
     });
+    chrome.contextMenus.create({
+      id: 'show',
+      title: 'Show',
+      contexts: ['all'],
+      visible: false,
+    });
+
+    chrome.contextMenus.create({
+      id: 'hide',
+      title: 'Hide',
+      contexts: ['all'],
+      visible: false,
+    });
   }
 });
 
 chrome.contextMenus.onClicked.addListener((info) => {
 
   if (info.menuItemId === 'hide') {
-    chrome.tabs.query({ currentWindow: true, active: true }, function (
-      tabs,
-    ) {
-      const tabId = tabs[0].id;
-      chrome.tabs.sendMessage(tabId, { type: 'hide' }, () => {
-        chrome.contextMenus.update('hide', { visible: false }, () => {
-          chrome.contextMenus.update('show', { visible: true })
+    chrome.contextMenus.update('hide', { visible: false }, () => {
+      chrome.contextMenus.update('show', { visible: true }, () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+          chrome.tabs.sendMessage(tabs[0].id, { type: 'contextHide' }, () => {
+            console.log(chrome.runtime.lastError.message) 
+          })
         })
       });
     });
   }
 
   if (info.menuItemId === 'show') {
-    chrome.tabs.query({ currentWindow: true, active: true }, function (
-      tabs,
-    ) {
-      const tabId = tabs[0].id;
-      chrome.tabs.sendMessage(tabId, { type: 'show' }, () => {
-        chrome.contextMenus.update('show', { visible: false }, () => {
-          chrome.contextMenus.update('hide', { visible: true })
+    chrome.contextMenus.update('hide', { visible: true }, () => {
+      chrome.contextMenus.update('show', { visible: false }, () => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+          chrome.tabs.sendMessage(tabs[0].id, { type: 'contextShow' }, () => {
+            console.log(chrome.runtime.lastError.message) 
+          })
         })
       });
     });
@@ -149,10 +157,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     chrome.contextMenus.update('logout', { visible: true }, function () {
       chrome.contextMenus.update('login', { visible: false }, function () {
         chrome.contextMenus.update('ViewDashboard', { visible: true }, function () {
-          chrome.tabs.onActivated.addListener(function (activeInfo) {
-            chrome.tabs.onUpdated.addListener(function () {
-              chrome.tabs.sendMessage(activeInfo.tabId, { type: 'show' })
-              runTokenTimer()
+          chrome.contextMenus.update('hide', { visible: true }, function () {
+            chrome.contextMenus.update('show', { visible: false }, function() {
+              chrome.tabs.onActivated.addListener(function (activeInfo) {
+                chrome.tabs.onUpdated.addListener(function () {
+                  chrome.tabs.sendMessage(activeInfo.tabId, { type: 'show' })
+                  runTokenTimer()
+                })
+              })
             })
           })
         });
@@ -201,17 +213,21 @@ function signOut() {
     chrome.contextMenus.update('login', { visible: true }, function () {
       chrome.contextMenus.update('logout', { visible: false }, function () {
         chrome.contextMenus.update('ViewDashboard', { visible: false }, function () {
-          chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, { type: "hide" })
-            clearTimeout(timeout)
-            const notificationOptions = {
-              type: 'basic',
-              iconUrl: './images/icon48.png',
-              title: 'Sign-Out Success!',
-              message:
-                'Your are now logged off. Try saving a new job to log back in!',
-            };
-            return chrome.notifications.create(notificationOptions);
+          chrome.contextMenus.update('hide', { visible: false }, function () {
+            chrome.contextMenus.update('show', { visible: false }, function() {
+              chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, { type: "hide" })
+                clearTimeout(timeout)
+                const notificationOptions = {
+                  type: 'basic',
+                  iconUrl: './images/icon48.png',
+                  title: 'Sign-Out Success!',
+                  message:
+                    'Your are now logged off. Try saving a new job to log back in!',
+                };
+                return chrome.notifications.create(notificationOptions);
+              })
+            })
           })
         })
       });
