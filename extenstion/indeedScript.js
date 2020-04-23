@@ -30,6 +30,7 @@ window.addEventListener("load", () => {
       container.setAttribute('id', 'myForm')
       form.classList.add('form-container')
       openButton.classList.add('open-button')
+      openButton.setAttribute('style', 'display: none !important')
       submitButton.classList.add('btn')
       submitButton.setAttribute('id', 'saveJob')
       formTitle.setAttribute('id', 'formLogo')
@@ -335,18 +336,63 @@ window.addEventListener("load", () => {
       })
 
       chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-
         if (request.type === 'hide') {
-          const tack = 
-          document.querySelector('.open-button')
-          tack.setAttribute('style', 'display: none !important')
+          chrome.storage.local.get('token', (storage) => {
+            if (storage.token) {
+              const tack =
+                document.querySelector('.open-button')
+              tack.setAttribute('style', 'display: block !important')
+              console.log('show')
+              return tack
+            } else {
+              chrome.storage.local.get('token', () => {
+                const tack =
+                  document.querySelector('.open-button')
+                tack.setAttribute('style', 'display: none !important')
+                console.log('hide')
+                return tack
+              })
+            }
+          })
         }
-       
-          if (request.type === 'show') {
-            const tack =
-              document.querySelector('.open-button')
-            tack.setAttribute('style', 'display')
-          }
+      
+        if (request.type === 'show') {
+          chrome.storage.local.get('token', (storage) => {
+            if (storage.token) {
+              const tack =
+                document.querySelector('.open-button')
+              tack.setAttribute('style', 'display: block !important')
+              console.log('show')
+              return tack
+            } else {
+              chrome.storage.local.get('token', () => {
+                const tack =
+                  document.querySelector('.open-button')
+                tack.setAttribute('style', 'display: none !important')
+                console.log('hide')
+                return tack
+              })
+            }
+          })
+        }
+      
+        if (request.type === 'tabActivated') {
+          chrome.storage.local.get('token', (storage) => {
+            if (storage.token) {
+              const tack =
+                document.querySelector('.open-button')
+              tack.setAttribute('style', 'display: block !important')
+              console.log('show tab')
+              return tack
+            } else {
+              const tack =
+                document.querySelector('.open-button')
+              tack.setAttribute('style', 'display: none !important')
+              console.log('hide')
+              return tack
+            }
+          })
+        }
       
         if (request.type === 'getTokenFromStorage') {
           if (
@@ -356,6 +402,7 @@ window.addEventListener("load", () => {
             return setToken();
           }
         }
+        
       })
 
 
