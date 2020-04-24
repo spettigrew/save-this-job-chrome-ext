@@ -116,7 +116,7 @@ chrome.contextMenus.onClicked.addListener((info) => {
     chrome.storage.local.get('token', (result) => {
       if (result.token) {
         return chrome.tabs.create({
-          url: 'https://staging.d3d1q8nq7a3fmz.amplifyapp.com/dashboard',
+          url: 'https://www.savethisjob.com/dashboard',
         });
       } else {
         return chrome.contextMenus.update('ViewDashboard', { visible: true });
@@ -177,9 +177,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       chrome.contextMenus.update('logout', { visible: false }, function () {
         chrome.contextMenus.update('login', { visible: true }, function () {
           chrome.contextMenus.update('ViewDashboard', { visible: false }, () => {
-            chrome.storage.local.remove('token')
-            chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-              chrome.tabs.sendMessage(tabs[0].id, { type: "hide" })
+            chrome.contextMenus.update('hide', { visible: false }, function () {
+              chrome.contextMenus.update('show', { visible: false }, function() {
+                chrome.storage.local.remove('token')
+                chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+                  chrome.tabs.sendMessage(tabs[0].id, { type: "hide" })
+                })
+              })
             })
           });
         })
@@ -193,7 +197,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 function login() {
   chrome.tabs.create(
-    { url: 'https://staging.d3d1q8nq7a3fmz.amplifyapp.com/login' },
+    { url: 'https://www.savethisjob.com/login' },
     function () {
       chrome.tabs.onUpdated.addListener(() => {
         chrome.tabs.query({ currentWindow: true, active: true }, function (
@@ -236,7 +240,6 @@ function signOut() {
 }
 
 chrome.tabs.onActivated.addListener(function (activeInfo) {
-  console.log('activated')
   chrome.runtime.lastError
   chrome.tabs.sendMessage(activeInfo.tabId, { type: "tabActivated" }, () => {
     chrome.runtime.lastError
