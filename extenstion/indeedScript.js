@@ -67,7 +67,7 @@ window.addEventListener("load", () => {
       popup.innerHTML = `
       <p style="color: #08A6C9; margin: 0px; font-size: 16px; font-family: lato; font-weight: 400; letter-spacing: 0px; line-height: 23px;">Your job was saved to<p>
       <p style="color: #08A6C9; margin: 10px 0px 30px; font-size: 35px; font-family: lato; font-weight: 600; letter-spacing: 0px; line-height: 42px; text-transform: capitalize;">SaveThisJob</p>
-      <a href="https://staging.d3d1q8nq7a3fmz.amplifyapp.com/dashboard" target="_blank" style="box-sizing: border-box; line-height: 15px; text-decoration: none; display: inline-block; padding: 10px 20px; color: white; font-weight: 600; border-radius: 4px; transition: all 0.4s ease-out 0s; background-color: #08A6C9; text-align: center; font-size: 14px; border: 1px solid rgba(0, 0, 0, 0); position: relative; box-shadow: rgba(25, 4, 69, 0.05) 0px 4px 10px;">View Dashboard</a>
+      <a href="https://savethisjob.com/dashboard" target="_blank" style="box-sizing: border-box; line-height: 15px; text-decoration: none; display: inline-block; padding: 10px 20px; color: white; font-weight: 600; border-radius: 4px; transition: all 0.4s ease-out 0s; background-color: #08A6C9; text-align: center; font-size: 14px; border: 1px solid rgba(0, 0, 0, 0); position: relative; box-shadow: rgba(25, 4, 69, 0.05) 0px 4px 10px;">View Dashboard</a>
       `
 
       form.appendChild(formTitle)
@@ -299,7 +299,7 @@ window.addEventListener("load", () => {
             location: locationInput.value
           };
 
-          fetch('https://staging-save-this-job.herokuapp.com/users/addJob', {
+          fetch('https://save-this-job.herokuapp.com/users/addJob', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -397,7 +397,7 @@ window.addEventListener("load", () => {
         if (request.type === 'getTokenFromStorage') {
           if (
             window.location.href ===
-            'https://staging.d3d1q8nq7a3fmz.amplifyapp.com/dashboard'
+            'https://savethisjob.com/dashboard'
           ) {
             return setToken();
           }

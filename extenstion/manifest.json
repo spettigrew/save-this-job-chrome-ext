@@ -43,6 +43,7 @@
     "storage",
     "activeTab",
     "https://staging-save-this-job.herokuapp.com/jobPosts/addJob",
+    "https://save-this-job.herokuapp.com/jobPosts/addJob",
     "notifications"
   ],
   "content_security_policy": "script-src 'self' 'sha256-eIy+ZFmUSgAl2hneWuGKuPlIoZulI0x+WlWHlAkasAM='; object-src 'self'",
