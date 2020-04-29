@@ -222,13 +222,13 @@ formStyle.textContent = `
     }
 
     .form-container label {
-      margin: 0px;
-      font-size: 14px;
-      font-family: lato;
-      font-weight: 600;
-      letter-spacing: 0px;
-      line-height: 21px;
-      text-align: left;
+      margin: 0px !important;
+      font-size: 14px !important;
+      font-family: lato !important;
+      font-weight: 600 !important;
+      letter-spacing: 0px !important;
+      line-height: 21px !important;
+      text-align: left !important;
     }
     
     /* When the inputs get focus, do something */
