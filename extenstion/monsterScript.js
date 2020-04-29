@@ -19,6 +19,7 @@ window.addEventListener("load", () => {
     const jobDescriptionInput = document.createElement('textarea')
     const openButton = document.createElement('img')
     const submitButton = document.createElement('button')
+    const drag = document.createElement('img')
 
     shadow.setAttribute('id', 'shadowBox')
     popup.setAttribute('id', 'popup')
@@ -33,6 +34,7 @@ window.addEventListener("load", () => {
     submitButton.setAttribute('id', 'saveJob')
     formTitle.setAttribute('id', 'formLogo')
     formLogo.src = chrome.runtime.getURL('./images/logo.png')
+    drag.src = chrome.runtime.getURL('./images/drag24.png')
 
     companyLabel.setAttribute('for', 'company')
     companyInput.setAttribute('type', 'text')
@@ -54,6 +56,7 @@ window.addEventListener("load", () => {
     jobDescriptionInput.setAttribute('type', 'textarea')
     jobDescriptionInput.setAttribute('placeholder', 'Description')
     jobDescriptionInput.setAttribute('name', 'description')
+    drag.setAttribute('id', 'dragForm')
     submitButton.textContent = 'Add'
     openButton.src = chrome.extension.getURL("./images/icon48.png")
     companyLabel.textContent = 'Company'
@@ -66,7 +69,7 @@ window.addEventListener("load", () => {
       <p style="color: #08A6C9; margin: 10px 0px 30px; font-size: 35px; font-family: lato; font-weight: 600; letter-spacing: 0px; line-height: 42px; text-transform: capitalize;">SaveThisJob</p>
       <a href="https://www.savethisjob.com/dashboard" target="_blank" style="box-sizing: border-box; line-height: 15px; text-decoration: none; display: inline-block; padding: 10px 20px; color: white; font-weight: 600; border-radius: 4px; transition: all 0.4s ease-out 0s; background-color: #08A6C9; text-align: center; font-size: 14px; border: 1px solid rgba(0, 0, 0, 0); position: relative; box-shadow: rgba(25, 4, 69, 0.05) 0px 4px 10px;">View Dashboard</a>
       `
-
+    form.appendChild(drag)
     form.appendChild(formTitle)
     formTitle.appendChild(formLogo)
     form.appendChild(companyLabel)
@@ -86,6 +89,19 @@ window.addEventListener("load", () => {
     window.document.body.appendChild(openButton)
     window.document.body.appendChild(container)
 
+    chrome.storage.local.get('token', (storage) => {
+      if (!storage.token) {
+        const openPopup = document.querySelector('.open-button')
+        openPopup.setAttribute('style', 'display: none !important')
+        return openPopup
+      } else {
+        const openPopup = document.querySelector('.open-button')
+        openPopup.setAttribute('style', 'display: block !important')
+        return openPopup
+      }
+    })
+
+
     const shadowRoot = container.attachShadow({ mode: 'open' });
     const formStyle = document.createElement('style')
     formStyle.textContent = `
@@ -95,6 +111,7 @@ window.addEventListener("load", () => {
     #formLogo {
       display: flex;
       justify-content: center;
+      padding-bottom: 15px;
     }
     
     /* Button used to open the contact form - fixed at the bottom of the page */
@@ -108,7 +125,6 @@ window.addEventListener("load", () => {
       right: 28px;
       display: none !important;
       z-index: 985696587451232547;
-      /* width: 280px; */
     }
     
     /* The popup form - hidden by default */
@@ -117,41 +133,95 @@ window.addEventListener("load", () => {
       position: fixed;
       bottom: 95px;
       right: 15px;
-      border: 3px solid #f1f1f1;
-      z-index: 999999999999;
+      z-index: 99999999999999999999999;
     }
     
     /* Add styles to the form container */
     .form-container {
-      max-width: 300px;
-      padding: 10px;
+      padding: 20px;
+      border-radius: 8px;
       background-color: white;
-      z-index: 999999999999999;
+      box-shadow: rgba(25, 4, 69, 0.4) 0px 0px 1px, rgba(25, 4, 69, 0.2) 0px 3px 10px;
+      width: 280px;
+      position: absolute;
+      right: 0px;
+      bottom: 60px;
+      overflow: visible;
+      height: 654px;
     }
     
     /* Full-width input fields */
     .form-container input[type=text], .form-container input[type=text] {
+      background-color: #fff;
+      background-image: none !important;
+      outline: 0;
+      box-sizing: border-box;
+      font-family: 'Lato', sans-serif !important;
+      font-size: 14px !important;
+      letter-spacing: 0px;
       width: 100%;
-      padding: 15px;
-      margin: 5px 0 22px 0 !important;
-      border: none;
-      background: #f1f1f1;
+      border-top: none !important;
+      border-left: none !important;
+      border-right: none !important;
+      box-shadow: none !important;
+      border-bottom: 1px solid #eee !important;
+      font-weight: 400 !important;
+      margin-bottom: 10px !important;
+      color: #08A6C9 !important;
+      border-radius: 0 !important;
+      line-height: normal !important;
+      padding: 20px 0 !important;
     }
     
     .form-container textarea {
+      background-color: #fff;
+      background-image: none !important;
+      outline: 0;
+      box-sizing: border-box;
+      font-family: 'Lato', sans-serif !important;
+      font-size: 14px !important;
+      letter-spacing: 0px;
       width: 100%;
-      padding: 15px;
-      margin: 5px 0 22px 0 !important;
-      border: none;
-      background: #f1f1f1;
-      height: 100px;
-      overflow-y: auto
+      border-top: none !important;
+      border-left: none !important;
+      border-right: none !important;
+      box-shadow: none !important;
+      border-bottom: 1px solid #eee !important;
+      font-weight: 400 !important;
+      margin-bottom: 10px !important;
+      color: #08A6C9 !important;
+      border-radius: 0 !important;
+      line-height: normal !important;
+      padding: 20px 0 !important;
+    }
+
+    .form-container label {
+      margin: 0px !important;
+      font-size: 14px !important;
+      font-family: 'Lato', sans-serif !important;
+      font-weight: 600 !important;
+      letter-spacing: 0px !important;
+      line-height: 21px !important;
+      text-align: left !important;
     }
     
     /* When the inputs get focus, do something */
     .form-container input[type=text]:focus, .form-container textarea:focus {
-      background-color: #ddd;
-      outline: none;
+      background-image: none !important;
+      box-sizing: border-box;
+      font-family: 'Lato', sans-serif !important;
+      letter-spacing: 0px;
+      width: 100%;
+      border-top: none !important;
+      border-left: none !important;
+      border-right: none !important;
+      border-bottom: 1px solid #08A6C9 !important;
+      box-shadow: none !important;
+      font-weight: 400 !important;
+      margin-bottom: 10px !important;
+      color: #08A6C9 !important;
+      border-radius: 0 !important;
+      padding: 20px 0 !important;
     }
     
     /* Set a style for the submit/login button */
@@ -165,23 +235,12 @@ window.addEventListener("load", () => {
       margin-bottom:10px;
       opacity: 0.8;
     }
-    
-    /* Add a background color to the cancel button */
-    .form-container .cancel {
-      background-color: #ddd;
-      color: white;
-    }
-    
+     
     /* Add some hover effects to buttons */
     .form-container .btn:hover, .open-button:hover {
       opacity: 1;
     }
     
-    .form-container label {
-      font-size: 12px !important;
-      font-weight: bold;
-    }
-
     .formSuccess {
       display: flex;
       flex-direction: column;
@@ -192,13 +251,17 @@ window.addEventListener("load", () => {
       background-color: #f1f1f1;
       z-index: 9999999999999999
     }
+
+    #dragForm {
+      cursor: move;
+      z-index: 10;
+    }
     `
     shadowRoot.appendChild(formStyle)
     shadowRoot.appendChild(form)
     shadowRoot.appendChild(popup)
 
     function togglePopup() {
-      console.log('from the monsterScript')
       const title = document.querySelector('#JobViewHeader h1.title') || null
       const setTitle = () => {
         const splitAfter = title.textContent.indexOf('at ')
@@ -258,6 +321,7 @@ window.addEventListener("load", () => {
         container.style.display = "block";
         form.style.display = "block";
         element.style.display = "block";
+        form.setAttribute('style', 'bottom: 10px; right: 15px;')
       } else {
         element.style.display = "none";
         openButton.src = chrome.extension.getURL("./images/icon48.png")
@@ -268,6 +332,48 @@ window.addEventListener("load", () => {
 
     document.querySelector(".open-button").addEventListener("click", () => {
       togglePopup()
+
+      dragElement(shadowRoot.querySelector('.form-container'));
+
+      function dragElement(elmnt) {
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        if (shadowRoot.getElementById('dragForm')) {
+          shadowRoot.getElementById('dragForm').onmousedown = dragMouseDown;
+        } else {
+          elmnt.onmousedown = dragMouseDown;
+        }
+  
+        function dragMouseDown(e) {
+          e = e || window.event;
+          e.preventDefault();
+          // get the mouse cursor position at startup:
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          document.onmouseup = closeDragElement;
+          // call a function whenever the cursor moves:
+          document.onmousemove = elementDrag;
+        }
+  
+        function elementDrag(e) {
+          e = e || window.event;
+          e.preventDefault();
+          // calculate the new cursor position:
+          pos1 = pos3 - e.clientX;
+          pos2 = pos4 - e.clientY;
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          // set the element's new position:
+          elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+          elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        }
+  
+  
+        function closeDragElement() {
+          /* stop moving when mouse button is released:*/
+          document.onmouseup = null;
+          document.onmousemove = null;
+        }
+      }
     })
 
     const addJob = shadowRoot.querySelector('#saveJob')
