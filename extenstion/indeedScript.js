@@ -69,7 +69,7 @@ window.addEventListener("load", () => {
       popup.innerHTML = `
       <p style="color: #08A6C9; margin: 0px; font-size: 16px; font-family: lato; font-weight: 400; letter-spacing: 0px; line-height: 23px;">Your job was saved to<p>
       <p style="color: #08A6C9; margin: 10px 0px 30px; font-size: 35px; font-family: lato; font-weight: 600; letter-spacing: 0px; line-height: 42px; text-transform: capitalize;">SaveThisJob</p>
-      <a href="https://www.savethisjob.com/dashboard" target="_blank" style="box-sizing: border-box; line-height: 15px; text-decoration: none; display: inline-block; padding: 10px 20px; color: white; font-weight: 600; border-radius: 4px; transition: all 0.4s ease-out 0s; background-color: #08A6C9; text-align: center; font-size: 14px; border: 1px solid rgba(0, 0, 0, 0); position: relative; box-shadow: rgba(25, 4, 69, 0.05) 0px 4px 10px;">View Dashboard</a>
+      <a href="http://localhost:3000/dashboard" target="_blank" style="box-sizing: border-box; line-height: 15px; text-decoration: none; display: inline-block; padding: 10px 20px; color: white; font-weight: 600; border-radius: 4px; transition: all 0.4s ease-out 0s; background-color: #08A6C9; text-align: center; font-size: 14px; border: 1px solid rgba(0, 0, 0, 0); position: relative; box-shadow: rgba(25, 4, 69, 0.05) 0px 4px 10px;">View Dashboard</a>
       `
       form.appendChild(drag)
       form.appendChild(formTitle)
@@ -321,52 +321,51 @@ window.addEventListener("load", () => {
         }
       }
 
+      function dragElement(elmnt) {
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        if (shadowRoot.getElementById('dragForm')) {
+          shadowRoot.getElementById('dragForm').onmousedown = dragMouseDown;
+        } else {
+          elmnt.onmousedown = dragMouseDown;
+        }
+
+        function dragMouseDown(e) {
+          e = e || window.event;
+          e.preventDefault();
+          // get the mouse cursor position at startup:
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          document.onmouseup = closeDragElement;
+          // call a function whenever the cursor moves:
+          document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+          e = e || window.event;
+          e.preventDefault();
+          // calculate the new cursor position:
+          pos1 = pos3 - e.clientX;
+          pos2 = pos4 - e.clientY;
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          // set the element's new position:
+          elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+          elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        }
+
+
+        function closeDragElement() {
+          /* stop moving when mouse button is released:*/
+          document.onmouseup = null;
+          document.onmousemove = null;
+        }
+      }
+
 
 
       document.querySelector(".open-button").addEventListener("click", () => {
         togglePopup()
-
         dragElement(shadowRoot.querySelector('.form-container'));
-
-        function dragElement(elmnt) {
-          let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-          if (shadowRoot.getElementById('dragForm')) {
-            shadowRoot.getElementById('dragForm').onmousedown = dragMouseDown;
-          } else {
-            elmnt.onmousedown = dragMouseDown;
-          }
-
-          function dragMouseDown(e) {
-            e = e || window.event;
-            e.preventDefault();
-            // get the mouse cursor position at startup:
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            // call a function whenever the cursor moves:
-            document.onmousemove = elementDrag;
-          }
-
-          function elementDrag(e) {
-            e = e || window.event;
-            e.preventDefault();
-            // calculate the new cursor position:
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            // set the element's new position:
-            elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-            elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-          }
-
-
-          function closeDragElement() {
-            /* stop moving when mouse button is released:*/
-            document.onmouseup = null;
-            document.onmousemove = null;
-          }
-        }
       })
 
       const addJob = shadowRoot.querySelector('#saveJob')
@@ -401,10 +400,11 @@ window.addEventListener("load", () => {
             companyTitle: companyInput.value,
             companyUrl: company ? company.info.companyUrl : null,
             description: jobDescriptionInput.value,
-            location: locationInput.value
+            location: locationInput.value,
+            column_id: 'column-1',
           };
 
-          fetch('https://save-this-job.herokuapp.com/users/addJob', {
+          fetch('http://localhost:8080/users/addJob', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -420,7 +420,7 @@ window.addEventListener("load", () => {
                 addJob.innerHTML = 'Add'
                 return chrome.runtime.sendMessage({ type: 'getToken' });
               }
-              if (data.message === 'Job Post Created') {
+              if (data.message === 'Job post created') {
                 form.style.display = 'none'
                 popup.style.display = 'flex'
                 jobPostUrlInput.value = ""
@@ -441,6 +441,11 @@ window.addEventListener("load", () => {
       })
 
       chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        if (request.type === 'showForm') {
+          togglePopup()
+          dragElement(shadowRoot.querySelector('.form-container'));
+        }
+
         if (request.type === 'hide') {
           chrome.storage.local.get('token', (storage) => {
             if (storage.token) {
@@ -495,24 +500,24 @@ window.addEventListener("load", () => {
           })
         }
 
-        if (request.type === 'getTokenFromStorage') {
-          if (
-            window.location.href ===
-            'https://www.savethisjob.com/dashboard'
-          ) {
-            return setToken();
-          }
-        }
+        // if (request.type === 'getTokenFromStorage') {
+        //   if (
+        //     window.location.href ===
+        //     'http://localhost:3000/dashboard'
+        //   ) {
+        //     return setToken();
+        //   }
+        // }
 
       })
 
 
-      const setToken = () => {
-        const token = localStorage.getItem('token');
-        chrome.storage.local.set({ token }, () => {
-          chrome.runtime.sendMessage({ type: 'tokenSet' });
-        });
-      };
+      // const setToken = () => {
+      //   const token = localStorage.getItem('token');
+      //   chrome.storage.local.set({ token }, () => {
+      //     chrome.runtime.sendMessage({ type: 'tokenSet' });
+      //   });
+      // };
     }
   }
 

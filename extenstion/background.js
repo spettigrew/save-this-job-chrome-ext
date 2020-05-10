@@ -3,31 +3,31 @@ chrome.storage.local.get('token', (result) => {
     chrome.contextMenus.create({
       id: 'ViewDashboard',
       title: 'View Dashboard',
-      contexts: ['all'],
+      contexts: ['page'],
       visible: true,
     });
     chrome.contextMenus.create({
       id: 'logout',
       title: 'Logout',
-      contexts: ['all'],
+      contexts: ['page'],
       visible: true,
     });
     chrome.contextMenus.create({
       id: 'login',
       title: 'Login',
-      contexts: ['all'],
+      contexts: ['page'],
       visible: false,
     });
     chrome.contextMenus.create({
       id: 'show',
       title: 'Show',
-      contexts: ['all'],
+      contexts: ['page'],
       visible: false,
     });
     chrome.contextMenus.create({
       id: 'hide',
       title: 'Hide',
-      contexts: ['all'],
+      contexts: ['page'],
       visible: true,
     });
 
@@ -35,32 +35,32 @@ chrome.storage.local.get('token', (result) => {
     chrome.contextMenus.create({
       id: 'login',
       title: 'Login',
-      contexts: ['all'],
+      contexts: ['page'],
       visible: true,
     });
     chrome.contextMenus.create({
       id: 'logout',
       title: 'Logout',
-      contexts: ['all'],
+      contexts: ['page'],
       visible: false,
     });
     chrome.contextMenus.create({
       id: 'ViewDashboard',
       title: 'View Dashboard',
-      contexts: ['all'],
+      contexts: ['page'],
       visible: false,
     });
     chrome.contextMenus.create({
       id: 'show',
       title: 'Show',
-      contexts: ['all'],
+      contexts: ['page'],
       visible: false,
     });
 
     chrome.contextMenus.create({
       id: 'hide',
       title: 'Hide',
-      contexts: ['all'],
+      contexts: ['page'],
       visible: false,
     });
   }
@@ -195,9 +195,23 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 });
 
+chrome.browserAction.onClicked.addListener(function(tab) {
+  chrome.storage.local.get('token', (request) => {
+    if (request.token) {
+      chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, { type: 'showForm' }, () => {
+          console.log(chrome.runtime.lastError.message) 
+        })
+      })
+    } else {
+      login()
+    }
+  })
+});
+
 function login() {
   chrome.tabs.create(
-    { url: 'https://www.savethisjob.com/login' },
+    { url: 'http://localhost:3000/login' },
     function () {
       chrome.tabs.onUpdated.addListener(() => {
         chrome.tabs.query({ currentWindow: true, active: true }, function (
@@ -246,4 +260,6 @@ chrome.tabs.onActivated.addListener(function (activeInfo) {
     console.log('tabActivated message sent')
   })
 })
+
+
 

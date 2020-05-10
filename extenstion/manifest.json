@@ -20,7 +20,7 @@
     "scripts": ["background.js"],
     "persistent": true
   },
-  "page_action": {
+  "browser_action": {
     "default_icon": {
       "16": "./images/icon16.png",
       "24": "./images/icon24.png",
@@ -46,6 +46,6 @@
     "https://save-this-job.herokuapp.com/jobPosts/addJob",
     "notifications"
   ],
-  "content_security_policy": "script-src 'self' 'sha256-eIy+ZFmUSgAl2hneWuGKuPlIoZulI0x+WlWHlAkasAM='; object-src 'self'",
+  "content_security_policy": "script-src 'unsafe-eval' 'self' 'sha256-1G+Yi2dF5Fjo8+XRCHvsjm0a78wayuHdGcki6rheyGQ=' https://global.oktacdn.com/okta-signin-widget/3.1.3/js/okta-sign-in.min.js https://global.oktacdn.com/okta-signin-widget/3.1.3/css/okta-sign-in.min.css; object-src 'self'",
   "web_accessible_resources": ["*.html", "*.png", "*.js", "*.css"]
 }

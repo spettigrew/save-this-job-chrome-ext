@@ -80,7 +80,7 @@ jobDescription.textContent = 'Description'
 popup.innerHTML = `
       <p style="color: #08A6C9; margin: 0px; font-size: 16px; font-family: lato; font-weight: 400; letter-spacing: 0px; line-height: 23px;">Your job was saved to<p>
       <p style="color: #08A6C9; margin: 10px 0px 30px; font-size: 35px; font-family: lato; font-weight: 600; letter-spacing: 0px; line-height: 42px; text-transform: capitalize;">SaveThisJob</p>
-      <a href="https://www.savethisjob.com/dashboard" target="_blank" style="box-sizing: border-box; line-height: 15px; text-decoration: none; display: inline-block; padding: 10px 20px; color: white; font-weight: 600; border-radius: 4px; transition: all 0.4s ease-out 0s; background-color: #08A6C9; text-align: center; font-size: 14px; border: 1px solid rgba(0, 0, 0, 0); position: relative; box-shadow: rgba(25, 4, 69, 0.05) 0px 4px 10px;">View Dashboard</a>
+      <a href="http://localhost:3000/dashboard" target="_blank" style="box-sizing: border-box; line-height: 15px; text-decoration: none; display: inline-block; padding: 10px 20px; color: white; font-weight: 600; border-radius: 4px; transition: all 0.4s ease-out 0s; background-color: #08A6C9; text-align: center; font-size: 14px; border: 1px solid rgba(0, 0, 0, 0); position: relative; box-shadow: rgba(25, 4, 69, 0.05) 0px 4px 10px;">View Dashboard</a>
       `
 companyTooltip.innerHTML = `
 <div class="tooltip">
@@ -317,6 +317,96 @@ formStyle.textContent = `
 
 const shadowRoot = shadow.attachShadow({ mode: 'open' });
 
+function togglePopup() {
+  const element = shadowRoot.querySelector("#myForm");
+  const success = shadowRoot.querySelector('#popup')
+  if (element.style.display !== "block") {
+    openButton.src = chrome.extension.getURL("./images/close-window-50.png")
+    if (success.style.display === "flex") {
+      success.setAttribute('style', 'display: none !important')
+      form.style.display = "block";
+      openButton.src = chrome.extension.getURL("./images/close-window-50.png")
+    } else {
+      null
+    }
+    const inputs = shadowRoot.querySelectorAll('.input')
+
+    function onCompanyInputMouseUp() {
+      const selection = window.getSelection().toString()
+      companyInput.value = companyInput.value ? companyInput.value : selection
+    }
+
+    function onJobTitleInputMouseUp() {
+      const selection = window.getSelection().toString()
+      jobTitleInput.value = jobTitleInput.value ? jobTitleInput.value : selection
+    }
+
+    function onLocationInputMouseUp() {
+      const selection = window.getSelection().toString()
+      locationInput.value = locationInput.value ? locationInput.value : selection
+    }
+
+    function onDescriptionInputMouseUp() {
+      const selection = window.getSelection().toString()
+      jobDescriptionInput.value = jobDescriptionInput.value ? jobDescriptionInput.value : selection
+    }
+
+    inputs[0].addEventListener('focus', onCompanyInputMouseUp, false);
+    inputs[1].addEventListener('focus', onJobTitleInputMouseUp, false);
+    inputs[2].addEventListener('focus', onLocationInputMouseUp, false);
+    inputs[3].addEventListener('focus', onDescriptionInputMouseUp, false);
+
+    jobPostUrlInput.value = window.location.href
+    container.style.display = "block";
+    form.style.display = "block";
+    form.setAttribute('style', 'bottom: 10px; right: 15px;')
+    element.style.display = "block";
+  } else {
+    element.style.display = "none";
+    openButton.src = chrome.extension.getURL("./images/icon48.png")
+  }
+}
+
+function dragElement(elmnt) {
+  let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (shadowRoot.getElementById('dragForm')) {
+    shadowRoot.getElementById('dragForm').onmousedown = dragMouseDown;
+  } else {
+    elmnt.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+
+  function closeDragElement() {
+    /* stop moving when mouse button is released:*/
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+
 window.addEventListener("load", () => {
 
   window.document.body.appendChild(shadow)
@@ -347,104 +437,12 @@ window.addEventListener("load", () => {
   shadowRoot.appendChild(openButton)
   shadowRoot.appendChild(container)
 
-
-  function togglePopup() {
-    const element = shadowRoot.querySelector("#myForm");
-    const success = shadowRoot.querySelector('#popup')
-    if (element.style.display !== "block") {
-      openButton.src = chrome.extension.getURL("./images/close-window-50.png")
-      if (success.style.display === "flex") {
-        success.setAttribute('style', 'display: none !important')
-        form.style.display = "block";
-        openButton.src = chrome.extension.getURL("./images/close-window-50.png")
-      } else {
-        null
-      }
-      const inputs = shadowRoot.querySelectorAll('.input')
-
-      function onCompanyInputMouseUp() {
-        const selection = window.getSelection().toString()
-        companyInput.value = companyInput.value ? companyInput.value : selection
-      }
-
-      function onJobTitleInputMouseUp() {
-        const selection = window.getSelection().toString()
-        jobTitleInput.value = jobTitleInput.value ? jobTitleInput.value : selection
-      }
-
-      function onLocationInputMouseUp() {
-        const selection = window.getSelection().toString()
-        locationInput.value = locationInput.value ? locationInput.value : selection
-      }
-
-      function onDescriptionInputMouseUp() {
-        const selection = window.getSelection().toString()
-        jobDescriptionInput.value = jobDescriptionInput.value ? jobDescriptionInput.value : selection
-      }
-
-      inputs[0].addEventListener('focus', onCompanyInputMouseUp, false);
-      inputs[1].addEventListener('focus', onJobTitleInputMouseUp, false);
-      inputs[2].addEventListener('focus', onLocationInputMouseUp, false);
-      inputs[3].addEventListener('focus', onDescriptionInputMouseUp, false);
-
-      jobPostUrlInput.value = window.location.href
-      container.style.display = "block";
-      form.style.display = "block";
-      form.setAttribute('style', 'bottom: 10px; right: 15px;')
-      element.style.display = "block";
-    } else {
-      element.style.display = "none";
-      openButton.src = chrome.extension.getURL("./images/icon48.png")
-    }
-  }
-
   const addJob = shadowRoot.querySelector('#saveJob')
   const thumbtack = shadowRoot.querySelector('.open-button');
 
   thumbtack.addEventListener("click", () => {
     togglePopup()
-
     dragElement(shadowRoot.querySelector('.form-container'));
-
-    function dragElement(elmnt) {
-      let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-      if (shadowRoot.getElementById('dragForm')) {
-        shadowRoot.getElementById('dragForm').onmousedown = dragMouseDown;
-      } else {
-        elmnt.onmousedown = dragMouseDown;
-      }
-
-      function dragMouseDown(e) {
-        e = e || window.event;
-        e.preventDefault();
-        // get the mouse cursor position at startup:
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        document.onmouseup = closeDragElement;
-        // call a function whenever the cursor moves:
-        document.onmousemove = elementDrag;
-      }
-
-      function elementDrag(e) {
-        e = e || window.event;
-        e.preventDefault();
-        // calculate the new cursor position:
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        // set the element's new position:
-        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-      }
-
-
-      function closeDragElement() {
-        /* stop moving when mouse button is released:*/
-        document.onmouseup = null;
-        document.onmousemove = null;
-      }
-    }
   })
 
   addJob.addEventListener("click", (event) => {
@@ -465,10 +463,11 @@ window.addEventListener("load", () => {
         companyTitle: companyInput.value,
         companyUrl: null,
         description: jobDescriptionInput.value,
-        location: locationInput.value
+        location: locationInput.value,
+        column_id: 'column-1'
       };
 
-      fetch('https://save-this-job.herokuapp.com/users/addJob', {
+      fetch('http://localhost:8080/users/addJob', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -480,11 +479,12 @@ window.addEventListener("load", () => {
           return response.json();
         })
         .then((data) => {
+          console.log(data)
           if (data === 'Jwt is expired') {
             addJob.innerHTML = 'Add'
             return chrome.runtime.sendMessage({ type: 'getToken' });
           }
-          if (data.message === 'Job Post Created') {
+          if (data.message === 'Job post created') {
             form.style.display = 'none'
             popup.style.display = 'flex'
             jobPostUrlInput.value = ""
@@ -509,19 +509,11 @@ window.addEventListener("load", () => {
 })
 
 chrome.runtime.onMessage.addListener((request) => {
-  if (request.type === 'contextShow') {
-    const tack =
-      shadowRoot.querySelector('.open-button')
-    tack.setAttribute('style', 'display: block !important')
-    return tack
+  if (request.type === 'showForm') {
+    togglePopup()
+    dragElement(shadowRoot.querySelector('.form-container'));
   }
 
-  if (request.type === 'contextHide') {
-    const tack =
-      shadowRoot.querySelector('.open-button')
-    tack.setAttribute('style', 'display: none !important')
-    return tack
-  }
   if (request.type === 'hide') {
     chrome.storage.local.get('token', (storage) => {
       if (storage.token) {
@@ -577,7 +569,7 @@ chrome.runtime.onMessage.addListener((request) => {
   if (request.type === 'getTokenFromStorage') {
     if (
       window.location.href ===
-      'https://www.savethisjob.com/dashboard'
+      'http://localhost:3000/dashboard'
     ) {
       return setToken();
     }
