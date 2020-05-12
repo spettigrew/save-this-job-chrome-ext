@@ -404,7 +404,7 @@ window.addEventListener("load", () => {
             column_id: 'column-1',
           };
 
-          fetch('http://localhost:8080/users/addJob', {
+          fetch('https://staging-save-this-job.herokuapp.com/users/addJob', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -499,27 +499,7 @@ window.addEventListener("load", () => {
             }
           })
         }
-
-        // if (request.type === 'getTokenFromStorage') {
-        //   if (
-        //     window.location.href ===
-        //     'http://localhost:3000/dashboard'
-        //   ) {
-        //     return setToken();
-        //   }
-        // }
-
       })
-
-
-      // const setToken = () => {
-      //   const token = localStorage.getItem('token');
-      //   chrome.storage.local.set({ token }, () => {
-      //     chrome.runtime.sendMessage({ type: 'tokenSet' });
-      //   });
-      // };
     }
   }
-
-
 })

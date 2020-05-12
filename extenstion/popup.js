@@ -1,5 +1,6 @@
 const shadow = document.createElement('div')
 const popup = document.createElement('div')
+const loginSuccess = document.createElement('div')
 const container = document.createElement('div')
 const form = document.createElement('form')
 const formTitle = document.createElement('div')
@@ -27,6 +28,9 @@ shadow.setAttribute('id', 'shadowBox')
 popup.setAttribute('id', 'popup')
 popup.classList.add('formSuccess')
 popup.setAttribute('style', 'display: none !important')
+loginSuccess.setAttribute('id', 'loginSuccess')
+loginSuccess.className = 'loginSuccess'
+loginSuccess.setAttribute('style', 'display: none !important')
 container.classList.add('form-popup')
 container.setAttribute('id', 'myForm')
 form.classList.add('form-container')
@@ -82,6 +86,27 @@ popup.innerHTML = `
       <p style="color: #08A6C9; margin: 10px 0px 30px; font-size: 35px; font-family: lato; font-weight: 600; letter-spacing: 0px; line-height: 42px; text-transform: capitalize;">SaveThisJob</p>
       <a href="http://localhost:3000/dashboard" target="_blank" style="box-sizing: border-box; line-height: 15px; text-decoration: none; display: inline-block; padding: 10px 20px; color: white; font-weight: 600; border-radius: 4px; transition: all 0.4s ease-out 0s; background-color: #08A6C9; text-align: center; font-size: 14px; border: 1px solid rgba(0, 0, 0, 0); position: relative; box-shadow: rgba(25, 4, 69, 0.05) 0px 4px 10px;">View Dashboard</a>
       `
+loginSuccess.innerHTML = `
+<div style="display: flex; flex-direction: column; height: 450px; padding: 0px 40px; text-align: center; align-items: center; justify-content: center;">
+  <img src="chrome-extension://ideneijiccfapaeembbhleajekkkhdja/./images/logo.png" style="width: 85px; height: 35px; border: none; margin-bottom: 40px;">
+  <p style="color: #08A6C9; margin: 0px 0px 7px; font-size: 22px; font-family: lato; font-weight: 600; letter-spacing: 0px; line-height: 30px; text-transform: capitalize;">You’re All Set!</p>
+  <p style="margin: 15px 0px 30px; font-size: 16px; font-family: lato; font-weight: 400; letter-spacing: 0px; line-height: 23px;">The extension is ready</p>
+  <div>
+  <div style="padding: 15px 0px; text-align: left; border-bottom: 1px solid #08A6C9">
+    <p style="color: #08A6C9; margin: 0px 10px 0px 0px; font-size: 16px; font-family: lato; font-weight: 800; letter-spacing: 0px; display: inline-block; line-height: 23px;">1.</p>
+    <p style="margin: 0px; font-size: 16px; font-family: lato; font-weight: 400; letter-spacing: 0px; display: inline-block; line-height: 23px;">Find a job post online</p>
+  </div>
+  <div style="padding: 15px 0px; text-align: left; border-bottom: 1px solid #08A6C9">
+    <p style="color: #08A6C9; margin: 0px 10px 0px 0px; font-size: 16px; font-family: lato; font-weight: 800; letter-spacing: 0px; display: inline-block; line-height: 23px;">2.</p>
+    <p style="margin: 0px; font-size: 16px; font-family: lato; font-weight: 400; letter-spacing: 0px; display: inline-block; line-height: 23px;">Click on the thumbtack</p>
+  </div>
+  <div style="padding: 15px 0px; text-align: left; border-bottom: 1px solid #08A6C9">
+    <p style="color: #08A6C9; margin: 0px 10px 0px 0px; font-size: 16px; font-family: lato; font-weight: 800; letter-spacing: 0px; display: inline-block; line-height: 23px;">3.</p>
+    <p style="margin: 0px; font-size: 16px; font-family: lato; font-weight: 400; letter-spacing: 0px; display: inline-block; line-height: 23px;">Save your job</p>
+  </div>
+  </div>
+</div>
+`
 companyTooltip.innerHTML = `
 <div class="tooltip">
   <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAIRlWElmTU0AKgAAAAgABQESAAMAAAABAAEAAAEaAAUAAAABAAAASgEbAAUAAAABAAAAUgEoAAMAAAABAAIAAIdpAAQAAAABAAAAWgAAAAAAAABIAAAAAQAAAEgAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAAAA+gAwAEAAAAAQAAAA8AAAAA9Ay2CgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAVlpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDUuNC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KTMInWQAAApxJREFUKBVVU8tOU1EUXfvclwXaYquWgsQXTjQGX2hk4sixOPBF5AP8A3RgHAlxbkw0cWLCAAf6DyZGQaNxQEwkRhMJFAVaioX23nu26zTBR5Pe7p6z1t5r772uwH3uqsFdsS6Mpt8NSJxcUcFQCO1uqVSbwGwuSKfXrwzPO8w2XrYDd7ZjamZCoOOtbB55a7GaMl/Cb+CjuFlHAzK5OXrmlsM6nrQDPqKpN8+9YmmkuVLRfiOtr7E1JyJPHp07pPOrdXv9/UIYlXulsPbjxeK1oUuOZ9xjx9TrCUOiXalspAoteyZCnAZZz/hHevJBXzYTIVEV3qOwe8Qn3vGk3WOSfFYIhSqKImYpTkEyru7pwv6uCA8rdazHFmXf2GXmCMjTND1s3HCEPbJgvNMRreqRyMeT43vx+MJR3Bzsx2DgAaqaNWIUaDm8eP5lI5yqcjAZttBQXlkrF1mxlI0Q+QahZ/CylbRVku9+DYhnsSGXiWUtKFQ2+Odk6GNioYYHc0toEvRxqQqsNzEQGPwk2QeXSDwn3e3INapFi8JyPNly2Qm+sW8nskz0YbkOUEGGEmu88tiuEs+wakQxC0rjNm2Om5tjz8j4ONaTxwbljn9b4w0rEunqkWSFeIHMGqVzUK852WEnJ47YysGOgD1n8KlSwynGY+Uc3vPcV7U+cUq8pskz02xbTielWJJQaKLU2vO5DAqdEY7vLeDO0V7UWZnV7R6DRkIcO5xsjg3P/3GY0GEHdpVGviwt6nBH2Lp/ep/ZihMZ//Bd327Gti8w4WqhJDTSi+bo2bbD/vO2mZq5l4Peqnbluc0YbiXwPXSFAZJ6lXORidbomdtuX3+9/e9b9fTVgE8D/OIeufvubpFqg0OtsUdQ6jbRvYW/AXy8QgCGuIyXAAAAAElFTkSuQmCC" />
@@ -128,6 +153,7 @@ container.appendChild(form)
 shadow.appendChild(container)
 shadow.appendChild(openButton)
 container.appendChild(popup)
+container.appendChild(loginSuccess)
 
 const formStyle = document.createElement('style')
 formStyle.textContent = `
@@ -313,6 +339,18 @@ formStyle.textContent = `
       cursor: move;
       z-index: 10;
     }
+
+    .loginSuccess {
+      border-radius: 8px;
+      background-color: white;
+      box-shadow: rgba(25, 4, 69, 0.4) 0px 0px 1px, rgba(25, 4, 69, 0.2) 0px 3px 10px;
+      width: 270px;
+      position: absolute;
+      right: 0px;
+      bottom: 40px;
+      overflow: visible;
+      max-height: 609px;
+    }
 `
 
 const shadowRoot = shadow.attachShadow({ mode: 'open' });
@@ -363,6 +401,7 @@ function togglePopup() {
     element.style.display = "block";
   } else {
     element.style.display = "none";
+    loginSuccess.setAttribute('style', 'display: none !important')
     openButton.src = chrome.extension.getURL("./images/icon48.png")
   }
 }
@@ -413,7 +452,7 @@ window.addEventListener("load", () => {
 
 
 
-  const autoFills = ['https://www.monster.com', 'https://www.indeed.com', 'https://gigs.indeed.com', 'https://staging.d3d1q8nq7a3fmz.amplifyapp.com', 'https://www.savethisjob.com']
+  const autoFills = ['https://www.monster.com', 'https://www.indeed.com', 'https://gigs.indeed.com']
 
   for (let i = 0; i < autoFills.length; i++) {
     if (window.location.origin === autoFills[i]) {
@@ -467,7 +506,7 @@ window.addEventListener("load", () => {
         column_id: 'column-1'
       };
 
-      fetch('http://localhost:8080/users/addJob', {
+      fetch('https://staging-save-this-job.herokuapp.com/users/addJob', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -567,12 +606,18 @@ chrome.runtime.onMessage.addListener((request) => {
   }
 
   if (request.type === 'getTokenFromStorage') {
-    if (
-      window.location.href ===
-      'http://localhost:3000/dashboard'
-    ) {
-      return setToken();
-    }
+    chrome.storage.local.get('token', (res) => {
+      if (res.token) {
+        return null
+      } else {
+        if (
+          window.location.href ===
+          'http://localhost:3000/dashboard'
+        ) {
+          return setToken();
+        }
+      }
+    })
   }
 })
 
@@ -581,7 +626,13 @@ chrome.runtime.onMessage.addListener((request) => {
 const setToken = () => {
   const token = localStorage.getItem('token');
   chrome.storage.local.set({ token }, () => {
-    chrome.runtime.sendMessage({ type: 'tokenSet' });
+    chrome.runtime.sendMessage({ type: 'tokenSet' }, () => {
+      container.setAttribute('style', 'display: block !important')
+      form.setAttribute('style', 'display: none !important')
+      loginSuccess.setAttribute('style', 'display: block !important')
+      openButton.setAttribute('style', 'display: block !important')
+      openButton.src = chrome.extension.getURL("./images/close-window-50.png")
+    });
   });
 };
 

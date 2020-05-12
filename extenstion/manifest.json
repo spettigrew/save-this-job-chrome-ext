@@ -1,7 +1,7 @@
 {
   "name": "Save This Job",
   "manifest_version": 2,
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Chrome extension that allows users to save job posts from any job board.",
   "content_scripts": [
     {
@@ -46,6 +46,6 @@
     "https://save-this-job.herokuapp.com/jobPosts/addJob",
     "notifications"
   ],
-  "content_security_policy": "script-src 'unsafe-eval' 'self' 'sha256-1G+Yi2dF5Fjo8+XRCHvsjm0a78wayuHdGcki6rheyGQ=' https://global.oktacdn.com/okta-signin-widget/3.1.3/js/okta-sign-in.min.js https://global.oktacdn.com/okta-signin-widget/3.1.3/css/okta-sign-in.min.css; object-src 'self'",
+  "content_security_policy": "script-src 'self' 'sha256-eIy+ZFmUSgAl2hneWuGKuPlIoZulI0x+WlWHlAkasAM='; object-src 'self'",
   "web_accessible_resources": ["*.html", "*.png", "*.js", "*.css"]
 }
