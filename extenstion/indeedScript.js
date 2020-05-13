@@ -271,27 +271,40 @@ window.addEventListener("load", () => {
       };
 
       function togglePopup() {
+        const iframe = document.querySelector('#vjs-container-iframe')
+        const titleElmnt = iframe ? iframe.contentWindow.document.querySelector('.jobsearch-JobInfoHeader-title-container h3') : null
         const title =
           document.querySelector('#vjs-jobtitle') ||
+          titleElmnt ||
           document.querySelector('.jobsearch-JobInfoHeader-title-container h3') ||
           document.querySelector('.TitleText') ||
           null
+          
+        const companyATag = iframe ? iframe.contentWindow.document.querySelector('.icl-u-lg-mr--sm a') : null
+        const companyElmnt = iframe ? iframe.contentWindow.document.querySelector('.icl-u-lg-mr--sm') : null
         const company =
           document.querySelector('#vjs-cn a') ||
           document.querySelector('#vjs-cn') ||
+          companyATag ||
+          companyElmnt ||
           document.querySelector('.icl-u-lg-mr--sm a') ||
           document.querySelector('.icl-u-lg-mr--sm') ||
           document.querySelector('.CompanyName') ||
           null
         setCompanyName(company);
+
+        const locationElmnt = iframe ? iframe.contentWindow.document.querySelectorAll('.icl-u-xs-mt--xs')[1] : null
         const jobLocation =
           document.querySelector('#vjs-loc') ||
+          locationElmnt ||
           document.querySelectorAll(".icl-u-xs-mt--xs")[1] ||
           document.querySelector('.Location') ||
           null
 
+        const descriptionElmnt = iframe ? iframe.contentWindow.document.querySelector('#jobDescriptionText') : null
         const description =
           document.querySelector('#vjs-desc') ||
+          descriptionElmnt ||
           document.querySelector('#jobDescriptionText') ||
           document.querySelector('.JobContent') ||
           null

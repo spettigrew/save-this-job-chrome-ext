@@ -380,7 +380,7 @@ window.addEventListener("load", () => {
       const logo =
         document.querySelector('#JobViewHeader .mux-company-logo img') ||
         null;
-      console.log(logo)
+
       const companyUrl =
         document.querySelector('#AboutCompanyProfileLink') ||
         null;
@@ -432,7 +432,7 @@ window.addEventListener("load", () => {
             }
           })
           .catch((error) => {
-            console.error('Error:', error);
+            console.log(error('Error:', error));
             addJob.innerHTML = 'Add'
             chrome.runtime.sendMessage({ type: 'Error' });
           });
@@ -450,14 +450,12 @@ window.addEventListener("load", () => {
             const tack =
               document.querySelector('.open-button')
             tack.setAttribute('style', 'display: block !important')
-            console.log('show')
             return tack
           } else {
             chrome.storage.local.get('token', () => {
               const tack =
                 document.querySelector('.open-button')
               tack.setAttribute('style', 'display: none !important')
-              console.log('hide')
               return tack
             })
           }
@@ -470,14 +468,12 @@ window.addEventListener("load", () => {
             const tack =
               document.querySelector('.open-button')
             tack.setAttribute('style', 'display: block !important')
-            console.log('show')
             return tack
           } else {
             chrome.storage.local.get('token', () => {
               const tack =
                 document.querySelector('.open-button')
               tack.setAttribute('style', 'display: none !important')
-              console.log('hide')
               return tack
             })
           }
@@ -490,13 +486,11 @@ window.addEventListener("load", () => {
             const tack =
               document.querySelector('.open-button')
             tack.setAttribute('style', 'display: block !important')
-            console.log('show tab')
             return tack
           } else {
             const tack =
               document.querySelector('.open-button')
             tack.setAttribute('style', 'display: none !important')
-            console.log('hide')
             return tack
           }
         })
