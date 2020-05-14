@@ -84,8 +84,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       chrome.contextMenus.update('login', { visible: false }, function () {
         chrome.tabs.onActivated.addListener(function (activeInfo) {
           chrome.tabs.onUpdated.addListener(function () {
-            chrome.tabs.sendMessage(activeInfo.tabId, { type: 'show' })
-            runTokenTimer()
+            chrome.tabs.sendMessage(activeInfo.tabId, { type: 'show' }, () => {
+              runTokenTimer()
+            })
           })
         })
       })
@@ -96,10 +97,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     timeout = setTimeout(() => {
       chrome.contextMenus.update('logout', { visible: false }, function () {
         chrome.contextMenus.update('login', { visible: true }, function () {
-          chrome.storage.local.remove('token')
-          chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, { type: "hide" })
-          })
+          chrome.storage.local.remove('token'), () => {
+            chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+              chrome.tabs.sendMessage(tabs[0].id, { type: "hide" })
+            })
+          }
         })
       })
     }, 3000000)
@@ -108,7 +110,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
-chrome.browserAction.onClicked.addListener(function (tab) {
+chrome.browserAction.onClicked.addListener(function () {
   chrome.storage.local.get('token', (request) => {
     if (request.token) {
       chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {

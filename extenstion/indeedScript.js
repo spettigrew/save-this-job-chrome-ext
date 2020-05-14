@@ -283,11 +283,8 @@ window.addEventListener("load", () => {
         const companyATag = iframe ? iframe.contentWindow.document.querySelector('.icl-u-lg-mr--sm a') : null
         const companyElmnt = iframe ? iframe.contentWindow.document.querySelector('.icl-u-lg-mr--sm') : null
         const company =
-          document.querySelector('#vjs-cn a') ||
           document.querySelector('#vjs-cn') ||
-          companyATag ||
           companyElmnt ||
-          document.querySelector('.icl-u-lg-mr--sm a') ||
           document.querySelector('.icl-u-lg-mr--sm') ||
           document.querySelector('.CompanyName') ||
           null
@@ -383,19 +380,22 @@ window.addEventListener("load", () => {
 
       const addJob = shadowRoot.querySelector('#saveJob')
       addJob.addEventListener("click", (event) => {
+        const iframe = document.querySelector('#vjs-container-iframe')
         event.preventDefault()
         addJob.innerHTML = 'Loading...'
+        const img = iframe ? iframe.contentWindow.document.querySelector('.jobsearch-JobInfoHeader-logo') : null
         const logo =
           document.querySelector('#vjs-img-cmL') ||
+          img || 
           document.querySelector('.vjs-JobInfoHeader-logo-container img') ||
           document.querySelector('.jobsearch-CompanyAvatar-image') ||
           null;
+
+        const companyATag = iframe ? iframe.contentWindow.document.querySelector('.icl-u-lg-mr--sm a') : null
         const company =
           document.querySelector('#vjs-cn a') ||
-          document.querySelector('#vjs-cn') ||
+          companyATag ||
           document.querySelector('.icl-u-lg-mr--sm a') ||
-          document.querySelector('.icl-u-lg-mr--sm') ||
-          document.querySelector('.CompanyName') ||
           null;
         setCompanyName(company);
 
