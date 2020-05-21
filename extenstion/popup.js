@@ -531,7 +531,9 @@ window.addEventListener("load", () => {
             locationInput.value = ""
             jobDescriptionInput.value = ""
             addJob.innerHTML = 'Add'
-            return chrome.runtime.sendMessage({ type: 'jobSaveSuccess' });
+            chrome.runtime.sendMessage({ type: 'jobSaveSuccess' }, () => {
+              console.log(chrome.runtime.lastError)
+            });
           } else {
             return addJob.innerHTML = 'Add'
           }
@@ -546,7 +548,7 @@ window.addEventListener("load", () => {
 
 })
 
-chrome.runtime.onMessage.addListener((request) => {
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'showForm') {
     togglePopup()
     dragElement(shadowRoot.querySelector('.form-container'));
