@@ -444,41 +444,41 @@ window.addEventListener("load", () => {
         togglePopup()
         dragElement(shadowRoot.querySelector('.form-container'));
       }
-      if (request.type === 'hide') {
-        chrome.storage.local.get('token', (storage) => {
-          if (storage.token) {
-            const tack =
-              document.querySelector('.open-button')
-            tack.setAttribute('style', 'display: block !important')
-            return tack
-          } else {
-            chrome.storage.local.get('token', () => {
-              const tack =
-                document.querySelector('.open-button')
-              tack.setAttribute('style', 'display: none !important')
-              return tack
-            })
-          }
-        })
-      }
+      // if (request.type === 'hide') {
+      //   chrome.storage.local.get('token', (storage) => {
+      //     if (storage.token) {
+      //       const tack =
+      //         document.querySelector('.open-button')
+      //       tack.setAttribute('style', 'display: block !important')
+      //       return tack
+      //     } else {
+      //       chrome.storage.local.get('token', () => {
+      //         const tack =
+      //           document.querySelector('.open-button')
+      //         tack.setAttribute('style', 'display: none !important')
+      //         return tack
+      //       })
+      //     }
+      //   })
+      // }
     
-      if (request.type === 'show') {
-        chrome.storage.local.get('token', (storage) => {
-          if (storage.token) {
-            const tack =
-              document.querySelector('.open-button')
-            tack.setAttribute('style', 'display: block !important')
-            return tack
-          } else {
-            chrome.storage.local.get('token', () => {
-              const tack =
-                document.querySelector('.open-button')
-              tack.setAttribute('style', 'display: none !important')
-              return tack
-            })
-          }
-        })
-      }
+      // if (request.type === 'show') {
+      //   chrome.storage.local.get('token', (storage) => {
+      //     if (storage.token) {
+      //       const tack =
+      //         document.querySelector('.open-button')
+      //       tack.setAttribute('style', 'display: block !important')
+      //       return tack
+      //     } else {
+      //       chrome.storage.local.get('token', () => {
+      //         const tack =
+      //           document.querySelector('.open-button')
+      //         tack.setAttribute('style', 'display: none !important')
+      //         return tack
+      //       })
+      //     }
+      //   })
+      // }
     
       if (request.type === 'tabActivated') {
         chrome.storage.local.get('token', (storage) => {

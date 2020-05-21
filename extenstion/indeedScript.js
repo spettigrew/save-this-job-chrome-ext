@@ -415,6 +415,7 @@ window.addEventListener("load", () => {
             description: jobDescriptionInput.value,
             location: locationInput.value,
             column_id: 'column-1',
+            index: 0
           };
 
           fetch('https://staging-save-this-job.herokuapp.com/users/addJob', {
@@ -496,6 +497,7 @@ window.addEventListener("load", () => {
             }
           })
         }
+        
 
         if (request.type === 'tabActivated') {
           chrome.storage.local.get('token', (storage) => {

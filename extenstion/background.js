@@ -82,19 +82,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'tokenSet') {
     chrome.contextMenus.update('logout', { visible: true }, function () {
       chrome.contextMenus.update('login', { visible: false }, function () {
-        chrome.tabs.onActivated.addListener(function (activeInfo) {
-          chrome.tabs.onUpdated.addListener(function () {
-            chrome.tabs.sendMessage(activeInfo.tabId, { type: 'show' }, () => {
-              runTokenTimer()
-            })
-          })
-        })
+        return timeout
       })
     });
   }
 
-  function runTokenTimer() {
-    timeout = setTimeout(() => {
+  const timeout =
+    setTimeout(() => {
       chrome.contextMenus.update('logout', { visible: false }, function () {
         chrome.contextMenus.update('login', { visible: true }, function () {
           chrome.storage.local.remove('token'), () => {
@@ -106,14 +100,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       })
     }, 3000000)
 
-    return timeout
-  }
 });
 
 chrome.browserAction.onClicked.addListener(function () {
   chrome.storage.local.get('token', (request) => {
     if (request.token) {
-      chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+      chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, { type: 'showForm' }, () => {
           console.log(chrome.runtime.lastError.message)
         })
@@ -125,18 +117,17 @@ chrome.browserAction.onClicked.addListener(function () {
 });
 
 function login() {
-  chrome.tabs.create(
-    { url: 'http://localhost:3000/login' },
-    function () {
-      chrome.tabs.onUpdated.addListener(() => {
-        chrome.tabs.query({ currentWindow: true, active: true }, function (
-          tabs,
-        ) {
-          const tabId = tabs[0].id;
-          chrome.tabs.sendMessage(tabId, { type: 'getTokenFromStorage' });
+  chrome.tabs.create({ url: 'http://localhost:3000/login' }, () => {
+    chrome.tabs.onUpdated.addListener(() => {
+      chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+        const tabId = tabs[0].id;
+        chrome.tabs.sendMessage(tabId, { type: 'getTokenFromStorage' }, (response) => {
+          console.log(response)
+          console.log(chrome.runtime.lastError.message)
         });
       });
-    },
+    })
+  },
   );
 }
 
@@ -162,11 +153,11 @@ function signOut() {
   });
 }
 
-chrome.tabs.onActivated.addListener(function (activeInfo) {
-  chrome.runtime.lastError
-  chrome.tabs.sendMessage(activeInfo.tabId, { type: "tabActivated" }, () => {
-    chrome.runtime.lastError
-    console.log('tabActivated message sent')
+chrome.tabs.onActivated.addListener(function () {
+  chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, { type: "tabActivated" }, () => {
+      console.log(chrome.runtime.lastError)
+    })
   })
 })
 
