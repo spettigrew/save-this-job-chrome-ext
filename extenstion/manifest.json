@@ -1,7 +1,7 @@
 {
   "name": "Save This Job",
   "manifest_version": 2,
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Chrome extension that allows users to save job posts from any job board.",
   "content_scripts": [
     {
@@ -47,5 +47,8 @@
     "notifications"
   ],
   "content_security_policy": "script-src 'self' 'sha256-eIy+ZFmUSgAl2hneWuGKuPlIoZulI0x+WlWHlAkasAM='; object-src 'self'",
-  "web_accessible_resources": ["*.html", "*.png", "*.js", "*.css"]
+  "web_accessible_resources": ["*.html", "*.png", "*.js", "*.css"],
+  "externally_connectable": {
+    "matches": ["https://www.savethisjob.com/*", "http://localhost:3000/*"]
+  }
 }

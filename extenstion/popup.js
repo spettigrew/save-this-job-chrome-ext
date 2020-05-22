@@ -531,6 +531,25 @@ window.addEventListener("load", () => {
             locationInput.value = ""
             jobDescriptionInput.value = ""
             addJob.innerHTML = 'Add'
+            chrome.storage.local.get('currentJobs', (res) => {
+              res.currentJobs && res.currentJobs.map((job) => {
+                fetch(`https://staging-save-this-job.herokuapp.com/users/updateJob/${job.id}`, {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                  },
+                  body: JSON.stringify({index: job.index + 1}),
+                })
+                .then((res) => {
+                  return res.json()
+                })
+                .then((response) => {
+                  console.log(response)
+                })
+              })
+
+            })
             chrome.runtime.sendMessage({ type: 'jobSaveSuccess' }, () => {
               console.log(chrome.runtime.lastError)
             });
@@ -623,17 +642,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 })
 
 
-
 const setToken = () => {
   const token = localStorage.getItem('token');
   chrome.storage.local.set({ token }, () => {
-    chrome.runtime.sendMessage({ type: 'tokenSet' }, () => {
-      container.setAttribute('style', 'display: block !important')
-      form.setAttribute('style', 'display: none !important')
-      loginSuccess.setAttribute('style', 'display: block !important')
-      openButton.setAttribute('style', 'display: block !important')
-      openButton.src = chrome.extension.getURL("./images/close-window-50.png")
-    });
+    chrome.storage.local.get('loading', (res) => {
+      if (!res.loading) {
+        chrome.runtime.sendMessage({ type: 'tokenSet' }, () => {
+          container.setAttribute('style', 'display: block !important')
+          form.setAttribute('style', 'display: none !important')
+          loginSuccess.setAttribute('style', 'display: block !important')
+          openButton.setAttribute('style', 'display: block !important')
+          openButton.src = chrome.extension.getURL("./images/close-window-50.png")
+        });
+      }
+    })
   });
 };
 

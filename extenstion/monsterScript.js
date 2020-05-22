@@ -428,7 +428,26 @@ window.addEventListener("load", () => {
               locationInput.value = ""
               jobDescriptionInput.value = ""
               addJob.innerHTML = 'Add'
-              return chrome.runtime.sendMessage({ type: 'jobSaveSuccess' });
+              chrome.storage.local.get('currentJobs', (res) => {
+                res.currentJobs && res.currentJobs.map((job) => {
+                  fetch(`https://staging-save-this-job.herokuapp.com/users/updateJob/${job.id}`, {
+                    method: 'PUT',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      Authorization: `Bearer ${accessToken}`,
+                    },
+                    body: JSON.stringify({index: job.index + 1}),
+                  })
+                  .then((res) => {
+                    return res.json()
+                  })
+                  .then((response) => {
+                    console.log(response)
+                  })
+                })
+
+              })
+              chrome.runtime.sendMessage({ type: 'jobSaveSuccess' });
             }
           })
           .catch((error) => {
