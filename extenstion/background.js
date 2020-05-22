@@ -117,7 +117,7 @@ chrome.browserAction.onClicked.addListener(function () {
 });
 
 function login() {
-  chrome.tabs.create({ url: 'http://localhost:3000/login' }, () => {
+  chrome.tabs.create({ url: 'http://localhost:3000/dashboard' }, () => {
     chrome.tabs.onUpdated.addListener(() => {
       chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
         const tabId = tabs[0].id;
@@ -161,5 +161,12 @@ chrome.tabs.onActivated.addListener(function () {
   })
 })
 
+chrome.runtime.onMessageExternal.addListener(
+  function (request, sender, sendResponse) {
 
-
+    if (request.currentJobs) {
+      console.log(request.currentJobs)
+      console.log(request.loading)
+      chrome.storage.local.set({ currentJobs: request.currentJobs, loading: request.loading})
+    }
+  });
